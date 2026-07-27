@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('foto_keluar')->nullable();
             $table->decimal('latitude', 10, 7)->nullable();
             $table->decimal('longitude', 10, 7)->nullable();
-            $table->enum('status', ['hadir', 'telat', 'alpha'])->default('hadir');
+            $table->enum('status', ['hadir', 'telat', 'alpha', 'izin'])->default('hadir');
             $table->timestamps();
         });
     }

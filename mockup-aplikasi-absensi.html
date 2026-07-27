@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mockup Aplikasi Absensi - Sinarta MJS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            primary: '#800020',
+                            variant: '#A3082F',
+                            secondary: '#EAB308',
+                            accent: '#22C55E',
+                            neutralBg: '#f9fafb',
+                            neutralText: '#374151',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-brand-neutralBg text-brand-neutralText font-sans flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r flex flex-col h-full shadow-sm z-20 hidden md:flex">
+        <div class="h-16 flex items-center px-6 border-b">
+            <span class="text-brand-variant font-extrabold text-2xl tracking-wide flex items-center gap-2">
+                <i class="fas fa-fingerprint text-brand-primary"></i> Sinarta
+            </span>
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+            <p class="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Menu Utama</p>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-brand-primary text-white rounded-xl shadow-md font-medium">
+                <i class="fas fa-home w-5"></i> Dashboard
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl transition-colors font-medium">
+                <i class="fas fa-camera w-5"></i> Absensi (Selfie)
+            </a>
+            <p class="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mt-6 mb-2">Pengajuan</p>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl transition-colors font-medium">
+                <i class="fas fa-envelope-open-text w-5"></i> Izin & Cuti
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl transition-colors font-medium">
+                <i class="fas fa-business-time w-5"></i> Lembur & Dinas
+            </a>
+            <p class="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mt-6 mb-2">Manajemen</p>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl transition-colors font-medium">
+                <i class="fas fa-check-double w-5"></i> Approval Atasan
+                <span class="ml-auto bg-brand-secondary text-white text-xs font-bold px-2 py-0.5 rounded-full">2</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full relative">
+        <!-- Topbar -->
+        <header class="h-16 bg-white/80 backdrop-blur-md border-b flex items-center justify-between px-6 z-10">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-gray-500 hover:text-brand-primary">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <h1 class="text-xl font-bold text-brand-neutralText">Dashboard Umum</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 relative transition-colors">
+                    <i class="fas fa-bell"></i>
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-brand-secondary rounded-full"></span>
+                </button>
+                <div class="h-6 w-px bg-gray-300"></div>
+                <div class="flex items-center gap-3 cursor-pointer hover:bg-gray-50 p-1 pr-3 rounded-full transition-colors">
+                    <div class="w-9 h-9 rounded-full bg-brand-primary text-white flex items-center justify-center font-bold text-sm shadow-inner ring-2 ring-white">
+                        ZAM
+                    </div>
+                    <div class="hidden md:block text-left">
+                        <p class="text-sm font-bold text-gray-800 leading-tight">Zidane Abbas Mallaniung</p>
+                        <p class="text-xs text-gray-500 font-medium">Software Developer</p>
+                    </div>
+                    <i class="fas fa-chevron-down text-xs text-gray-400 ml-2 hidden md:block"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50">
+            <div class="max-w-6xl mx-auto">
+                <!-- Welcome Section -->
+                <div class="mb-8 flex flex-col md:flex-row md:justify-between md:items-end gap-4">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900">Selamat pagi, Zidane! 👋</h2>
+                        <p class="text-gray-500 mt-2 text-sm">Jangan lupa melakukan absensi masuk hari ini. Tetap semangat!</p>
+                    </div>
+                    <div class="text-left md:text-right">
+                        <p class="text-sm font-bold text-gray-800">Jumat, 24 Juli 2026</p>
+                        <p class="text-xs text-gray-500">10:04 WITA</p>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-shadow">
+                        <div class="absolute top-0 right-0 p-4 opacity-5 transform translate-x-4 -translate-y-4 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-fingerprint text-8xl text-brand-primary"></i>
+                        </div>
+                        <div class="flex items-center gap-4 relative z-10">
+                            <div class="w-14 h-14 rounded-2xl bg-red-50 text-brand-primary flex items-center justify-center text-2xl shadow-sm border border-red-100">
+                                <i class="fas fa-sign-in-alt"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 font-semibold mb-1">Status Absen</p>
+                                <p class="text-xl font-extrabold text-gray-900">Belum Masuk</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-shadow">
+                        <div class="absolute top-0 right-0 p-4 opacity-5 transform translate-x-4 -translate-y-4 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-file-signature text-8xl text-brand-secondary"></i>
+                        </div>
+                        <div class="flex items-center gap-4 relative z-10">
+                            <div class="w-14 h-14 rounded-2xl bg-yellow-50 text-brand-secondary flex items-center justify-center text-2xl shadow-sm border border-yellow-100">
+                                <i class="fas fa-hourglass-half"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 font-semibold mb-1">Pengajuan Pending</p>
+                                <p class="text-xl font-extrabold text-gray-900">2 Menunggu</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-shadow">
+                        <div class="absolute top-0 right-0 p-4 opacity-5 transform translate-x-4 -translate-y-4 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-plane-departure text-8xl text-brand-accent"></i>
+                        </div>
+                        <div class="flex items-center gap-4 relative z-10">
+                            <div class="w-14 h-14 rounded-2xl bg-green-50 text-brand-accent flex items-center justify-center text-2xl shadow-sm border border-green-100">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 font-semibold mb-1">Sisa Cuti Tahunan</p>
+                                <p class="text-xl font-extrabold text-gray-900">10 Hari</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Absen Action & History Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Live Camera Mockup -->
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm lg:col-span-1 flex flex-col hover:shadow-md transition-shadow">
+                        <h3 class="text-lg font-extrabold text-gray-900 mb-4 flex items-center gap-2">
+                            <i class="fas fa-camera text-brand-primary"></i> Live Absen
+                        </h3>
+                        <div class="w-full aspect-[4/3] bg-gray-100 rounded-xl mb-6 flex flex-col items-center justify-center relative overflow-hidden border-2 border-dashed border-gray-300">
+                            <i class="fas fa-user-circle text-6xl text-gray-300 mb-2"></i>
+                            <p class="text-xs text-gray-400 font-medium">Akses Kamera Diperlukan</p>
+                            <div class="absolute bottom-3 left-3 right-3 text-center text-xs text-brand-neutralText bg-white/90 backdrop-blur shadow-sm py-2 px-3 rounded-lg flex items-center justify-center gap-2 font-semibold border border-gray-100">
+                                <i class="fas fa-map-marker-alt text-brand-variant"></i> Bontang, Kaltim (Sesuai)
+                            </div>
+                        </div>
+                        <button class="mt-auto w-full py-3.5 bg-brand-primary hover:bg-brand-variant text-white font-bold rounded-xl transition-all shadow-md shadow-red-900/20 flex justify-center items-center gap-2 transform hover:-translate-y-0.5">
+                            <i class="fas fa-sign-in-alt"></i> Absen Masuk Sekarang
+                        </button>
+                    </div>
+
+                    <!-- Recent History Table -->
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm lg:col-span-2 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-lg font-extrabold text-gray-900 flex items-center gap-2">
+                                <i class="fas fa-history text-brand-primary"></i> Riwayat Absensi
+                            </h3>
+                            <a href="#" class="text-sm font-semibold text-brand-primary hover:text-brand-variant transition-colors">Lihat Semua &rarr;</a>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse min-w-[500px]">
+                                <thead>
+                                    <tr class="border-b border-gray-200 text-xs text-gray-400 uppercase tracking-wider">
+                                        <th class="pb-4 font-bold px-2">Tanggal</th>
+                                        <th class="pb-4 font-bold px-2">Jam Masuk</th>
+                                        <th class="pb-4 font-bold px-2">Jam Keluar</th>
+                                        <th class="pb-4 font-bold px-2">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm">
+                                    <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                                        <td class="py-4 px-2 font-medium text-gray-800">Kamis, 23 Jul 2026</td>
+                                        <td class="py-4 px-2 font-semibold text-gray-600">07:55</td>
+                                        <td class="py-4 px-2 font-semibold text-gray-600">17:05</td>
+                                        <td class="py-4 px-2">
+                                            <span class="bg-green-50 text-brand-accent border border-green-200 px-2.5 py-1 rounded-md text-xs font-bold inline-flex items-center gap-1.5">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-brand-accent"></span> Hadir
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                                        <td class="py-4 px-2 font-medium text-gray-800">Rabu, 22 Jul 2026</td>
+                                        <td class="py-4 px-2 font-semibold text-gray-600">08:12</td>
+                                        <td class="py-4 px-2 font-semibold text-gray-600">17:15</td>
+                                        <td class="py-4 px-2">
+                                            <span class="bg-yellow-50 text-brand-secondary border border-yellow-200 px-2.5 py-1 rounded-md text-xs font-bold inline-flex items-center gap-1.5">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-brand-secondary"></span> Terlambat
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 transition-colors">
+                                        <td class="py-4 px-2 font-medium text-gray-800">Selasa, 21 Jul 2026</td>
+                                        <td class="py-4 px-2 text-gray-400 font-medium">-</td>
+                                        <td class="py-4 px-2 text-gray-400 font-medium">-</td>
+                                        <td class="py-4 px-2">
+                                            <span class="bg-blue-50 text-blue-600 border border-blue-200 px-2.5 py-1 rounded-md text-xs font-bold inline-flex items-center gap-1.5">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span> Cuti
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</body>
+</html>

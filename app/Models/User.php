@@ -65,4 +65,12 @@ class User extends Authenticatable
     public function officeTrips(){
         return $this->hasMany(OfficeTrip::class);
     }
+
+    public function payslips(){
+        return $this->hasMany(Payslip::class);
+    }
+
+    public function leaveRequests(){
+        return $this->hasMany(LeaveRequest::class);
+    }
 }

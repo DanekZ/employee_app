@@ -70,6 +70,15 @@ export default {
                     border: 'hsl(var(--sidebar-border))',
                     ring: 'hsl(var(--sidebar-ring))',
                 },
+
+                brand: {
+                    primary: '#800020',
+                    variant: '#A3082F',
+                    secondary: '#EAB308',
+                    accent: '#22C55E',
+                    neutralBg: '#f9fafb',
+                    neutralText: '#374151',
+                },
             },
         },
     },

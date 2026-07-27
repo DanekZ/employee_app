@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mockup Slip Gaji - Sinarta MJS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            primary: '#800020',
+                            variant: '#A3082F',
+                            secondary: '#EAB308',
+                            accent: '#22C55E',
+                            neutralBg: '#f9fafb',
+                            neutralText: '#374151',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-brand-neutralBg text-brand-neutralText font-sans flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r flex flex-col h-full shadow-sm z-20 hidden md:flex">
+        <div class="h-16 flex items-center px-6 border-b">
+            <span class="text-brand-variant font-extrabold text-2xl tracking-wide flex items-center gap-2">
+                <i class="fas fa-fingerprint text-brand-primary"></i> Sinarta
+            </span>
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+            <p class="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Menu Utama</p>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl transition-colors font-medium">
+                <i class="fas fa-home w-5"></i> Dashboard
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl transition-colors font-medium">
+                <i class="fas fa-camera w-5"></i> Absensi (Selfie)
+            </a>
+            
+            <p class="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mt-6 mb-2">Pengajuan</p>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl transition-colors font-medium">
+                <i class="fas fa-envelope-open-text w-5"></i> Izin & Cuti
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl transition-colors font-medium">
+                <i class="fas fa-business-time w-5"></i> Lembur & Dinas
+            </a>
+
+            <p class="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mt-6 mb-2">Keuangan</p>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-brand-primary text-white rounded-xl shadow-md font-medium">
+                <i class="fas fa-file-invoice-dollar w-5"></i> Slip Gaji Saya
+            </a>
+
+            <p class="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mt-6 mb-2">Manajemen (Atasan)</p>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl transition-colors font-medium">
+                <i class="fas fa-check-double w-5"></i> Approval Pengajuan
+                <span class="ml-auto bg-brand-secondary text-white text-xs font-bold px-2 py-0.5 rounded-full">2</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl transition-colors font-medium">
+                <i class="fas fa-file-signature w-5"></i> Generate Slip Gaji
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full relative">
+        <!-- Topbar -->
+        <header class="h-16 bg-white/80 backdrop-blur-md border-b flex items-center justify-between px-6 z-10">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-gray-500 hover:text-brand-primary">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <h1 class="text-xl font-bold text-brand-neutralText">Slip Gaji Saya</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 relative transition-colors">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <div class="h-6 w-px bg-gray-300"></div>
+                <div class="flex items-center gap-3 cursor-pointer hover:bg-gray-50 p-1 pr-3 rounded-full transition-colors">
+                    <div class="w-9 h-9 rounded-full bg-brand-primary text-white flex items-center justify-center font-bold text-sm shadow-inner ring-2 ring-white">
+                        ZAM
+                    </div>
+                    <div class="hidden md:block text-left">
+                        <p class="text-sm font-bold text-gray-800 leading-tight">Zidane Abbas Mallaniung</p>
+                        <p class="text-xs text-gray-500 font-medium">Software Developer</p>
+                    </div>
+                    <i class="fas fa-chevron-down text-xs text-gray-400 ml-2 hidden md:block"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50">
+            <div class="max-w-5xl mx-auto">
+                
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Riwayat Slip Gaji</h2>
+                    <p class="text-gray-500 mt-1 text-sm">Lihat rincian dan unduh slip gaji Anda per periode. Notifikasi email akan dikirim otomatis setiap slip gaji diterbitkan.</p>
+                </div>
+
+                <!-- Latest Payslip (Detailed View) -->
+                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm mb-8 overflow-hidden">
+                    <div class="bg-gray-50/80 border-b border-gray-100 p-5 md:px-8 md:py-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <div class="flex items-center gap-3 mb-1">
+                                <h3 class="text-xl font-extrabold text-gray-900">Periode Juli 2026</h3>
+                                <span class="bg-green-100 text-brand-accent px-2.5 py-1 rounded-md text-xs font-bold inline-flex items-center gap-1.5 border border-green-200">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-brand-accent"></span> Terbit
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-500">Diterbitkan pada 24 Jul 2026, 09:00 WITA</p>
+                        </div>
+                        <button class="w-full md:w-auto px-5 py-2.5 bg-brand-primary hover:bg-brand-variant text-white text-sm font-bold rounded-xl transition-all shadow-md shadow-red-900/20 flex items-center justify-center gap-2">
+                            <i class="fas fa-file-pdf"></i> Download PDF
+                        </button>
+                    </div>
+                    
+                    <div class="p-5 md:p-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- Pendapatan -->
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 border-b pb-2">Pendapatan</h4>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="font-medium text-gray-600">Gaji Pokok</span>
+                                        <span class="font-bold text-gray-900">Rp 8.000.000</span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="font-medium text-gray-600">Lembur (10 Jam) <i class="fas fa-info-circle text-gray-300 ml-1" title="Berdasarkan overtime_requests"></i></span>
+                                        <span class="font-bold text-gray-900">Rp 500.000</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center mt-4 pt-3 border-t border-dashed border-gray-200">
+                                    <span class="font-bold text-gray-800 text-sm">Total Pendapatan</span>
+                                    <span class="font-extrabold text-brand-accent">Rp 8.500.000</span>
+                                </div>
+                            </div>
+
+                            <!-- Potongan -->
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 border-b pb-2">Potongan</h4>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="font-medium text-gray-600">Alpha (0 Hari) <i class="fas fa-info-circle text-gray-300 ml-1" title="Berdasarkan attendances"></i></span>
+                                        <span class="font-bold text-gray-900">Rp 0</span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="font-medium text-gray-600">PPh 21</span>
+                                        <span class="font-bold text-gray-900">Rp 0</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center mt-4 pt-3 border-t border-dashed border-gray-200">
+                                    <span class="font-bold text-gray-800 text-sm">Total Potongan</span>
+                                    <span class="font-extrabold text-brand-primary">Rp 0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Take Home Pay -->
+                        <div class="mt-8 bg-gray-50 rounded-xl p-5 flex justify-between items-center border border-gray-100">
+                            <div>
+                                <p class="text-sm font-bold text-gray-500 uppercase">Take Home Pay</p>
+                                <p class="text-xs text-gray-400 mt-1">Ditransfer ke Mandiri a.n. Zidane Abbas Mallaniung</p>
+                            </div>
+                            <div class="text-2xl md:text-3xl font-black text-gray-900">
+                                Rp 8.500.000
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Previous Payslips -->
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Periode Sebelumnya</h3>
+                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                                    <th class="py-4 px-6 font-bold">Periode</th>
+                                    <th class="py-4 px-6 font-bold">Total Diterima</th>
+                                    <th class="py-4 px-6 font-bold">Status</th>
+                                    <th class="py-4 px-6 font-bold text-right">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-gray-100">
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="py-4 px-6 font-bold text-gray-800">Juni 2026</td>
+                                    <td class="py-4 px-6 font-semibold text-gray-600">Rp 8.100.000</td>
+                                    <td class="py-4 px-6">
+                                        <span class="bg-green-50 text-brand-accent px-2 py-1 rounded text-xs font-bold inline-flex items-center gap-1">
+                                            <i class="fas fa-check-circle"></i> Terbit
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-right">
+                                        <button class="text-brand-primary hover:text-brand-variant font-semibold text-sm px-3 py-1.5 rounded-lg hover:bg-red-50 transition-colors">
+                                            Unduh PDF <i class="fas fa-download ml-1"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="py-4 px-6 font-bold text-gray-800">Mei 2026</td>
+                                    <td class="py-4 px-6 font-semibold text-gray-600">Rp 7.800.000</td>
+                                    <td class="py-4 px-6">
+                                        <span class="bg-green-50 text-brand-accent px-2 py-1 rounded text-xs font-bold inline-flex items-center gap-1">
+                                            <i class="fas fa-check-circle"></i> Terbit
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-right">
+                                        <button class="text-brand-primary hover:text-brand-variant font-semibold text-sm px-3 py-1.5 rounded-lg hover:bg-red-50 transition-colors">
+                                            Unduh PDF <i class="fas fa-download ml-1"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</body>
+</html>
