@@ -44,7 +44,7 @@ const sidebarOpen = ref(false)
         <Link :href="route('izin.index')" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl font-medium">
           <i class="fas fa-envelope-open-text w-5"></i> Izin & Cuti
         </Link>
-        <Link  class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl font-medium">
+        <Link :href="route('lembur.index')"  class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl font-medium">
           <i class="fas fa-business-time w-5"></i> Lembur
         </Link>
         <Link class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl font-medium">

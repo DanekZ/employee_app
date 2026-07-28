@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\LeaveRequestController;
+use App\Http\Controllers\OvertimeRequestController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -22,6 +23,12 @@ Route::middleware(['auth'])->group(function(){
         Route::patch('/izin/{leaveRequest}/approve', [LeaveRequestController::class, 'approve'])->name("izin.approve");
         Route::patch('/izin/{LeaveRequest}/reject', [LeaveRequestController::class, 'reject'])->name('izin.reject');
     });
+});
+
+Route::middleware(['auth'])->group(function(){
+    Route::resource('lembur', OvertimeRequestController::class)
+        ->only('index', 'create', 'store')
+        ->parameters(['lembur' => 'overtimeRequest']);
 });
 
 
