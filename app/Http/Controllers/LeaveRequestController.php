@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\LeaveRequest;
 
 
 class LeaveRequestController extends Controller
@@ -57,6 +58,25 @@ class LeaveRequestController extends Controller
         return redirect()->route('izin.index')->with('success', 'pengajuan izin berhasil dikirim!');
     }
 
+    public function approve(LeaveRequest $leaveRequest){
+            $leaveRequest->update([
+                'status' => 'approved',
+                'approved_by' => auth()->id(),
+                'approved_at' => now(),
+            ]);
+
+            return back()->with('success', 'Pengajuan izin disetujui.');
+    }
+
+    public function reject(LeaveRequest $leaveRequest){
+        $leaveRequest->update([
+            'status' => 'rejected',
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+        ]);
+
+        return back()->with('success', 'Pengajuan izin ditolak.');
+    }
     /**
      * Display the specified resource.
      */

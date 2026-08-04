@@ -32,10 +32,8 @@ const sidebarOpen = ref(false)
       </div>
 
       <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+        <template v-if="user.role === 'karyawan'">  
         <p class="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Menu Utama</p>
-        <Link :href="route('dashboard')" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl font-medium">
-          <i class="fas fa-home w-5"></i> Dashboard
-        </Link>
         <Link  class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl font-medium">
           <i class="fas fa-camera w-5"></i> Absensi (Selfie)
         </Link>
@@ -47,7 +45,7 @@ const sidebarOpen = ref(false)
         <Link :href="route('lembur.index')"  class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl font-medium">
           <i class="fas fa-business-time w-5"></i> Lembur
         </Link>
-        <Link class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl font-medium">
+        <Link :href="route('dinas.index')" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl font-medium">
           <i class="fas fa-route w-5"></i> Dinas
         </Link>
 
@@ -55,10 +53,11 @@ const sidebarOpen = ref(false)
         <Link  class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl font-medium">
           <i class="fas fa-file-invoice-dollar w-5"></i> Slip Gaji Saya
         </Link>
+        </template>
 
         <template v-if="user.role === 'atasan' || user.role === 'admin'">
           <p class="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mt-6 mb-2">Manajemen</p>
-          <Link class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl font-medium">
+          <Link :href="route('approval.index')" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl font-medium">
             <i class="fas fa-check-double w-5"></i> Approval Pengajuan
           </Link>
           <Link  class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-brand-variant rounded-xl font-medium">

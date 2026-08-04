@@ -1,34 +1,54 @@
 <?php
 
+use App\Http\Controllers\ApprovalController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\LeaveRequestController;
+use App\Http\Controllers\OfficeTripController;
 use App\Http\Controllers\OvertimeRequestController;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome');
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
+
+    return redirect()->route(
+        auth()->user()->role === 'atasan' ? 'approval.index' : 'absensi.index'
+    );
 })->name('home');
 
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware(['auth'])->group(function(){
-    // Karyawan
+Route::middleware(['auth', 'role:karyawan'])->group(function(){
+    // Karyawan izin
     Route::resource('izin', LeaveRequestController::class)
         ->only(['index', 'create', 'store'])
         ->parameters(['izin' => 'leaveRequest']);
 
-    Route::middleware(['role:atasan'])->group(function (){
-        Route::patch('/izin/{leaveRequest}/approve', [LeaveRequestController::class, 'approve'])->name("izin.approve");
-        Route::patch('/izin/{LeaveRequest}/reject', [LeaveRequestController::class, 'reject'])->name('izin.reject');
-    });
+    // Karyawan Lembur
+    Route::resource('lembur', OvertimeRequestController::class)
+    ->only('index', 'create', 'store')
+    ->parameters(['lembur' => 'overtimeRequest']);
+
+
+    // Karyawan Dinas luar
+    Route::resource('dinas', OfficeTripController::class)
+        ->only('index', 'create', 'store')
+        ->parameters(['dinas' => 'officeTrip']);
 });
 
-Route::middleware(['auth'])->group(function(){
-    Route::resource('lembur', OvertimeRequestController::class)
-        ->only('index', 'create', 'store')
-        ->parameters(['lembur' => 'overtimeRequest']);
+Route::middleware(['auth', 'role:atasan'])->group(function(){
+    // Halaman gabungan
+    Route::get('/approval', [ApprovalController::class, 'index'])->name('approval.index');
+
+    // Approved/reject per modul
+    Route::patch('/izin/{leaveRequest}/approve', [LeaveRequestController::class, 'approve'])->name('izin.approve');
+    Route::patch('/izin/{leaveRequest}/reject', [LeaveRequestController::class, 'reject'])->name('izin.reject');
+
+    Route::patch('/lembur/{overtimeRequest}/approve', [OvertimeRequestController::class, 'approve'])->name('lembur.approve');
+    Route::patch('/lembur/{overtimeRequest}/reject', [OvertimeRequestController::class, 'reject'])->name('lembur.reject');
+
+    Route::patch('/dinas/{officeTrip}/approve', [OfficeTripController::class, 'approve'])->name('dinas.approve');
+    Route::patch('/dinas/{officeTrip}/reject', [OfficeTripController::class, 'reject'])->name('dinas.reject');
 });
 
 
