@@ -6,6 +6,8 @@ use Inertia\Inertia;
 use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\OfficeTripController;
 use App\Http\Controllers\OvertimeRequestController;
+use App\Http\Controllers\AttendanceController;
+
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
@@ -18,7 +20,7 @@ Route::get('/', function () {
     );
 })->name('home');
 
-Route::middleware(['auth', 'role:karyawan'])->group(function(){
+Route::middleware(['auth', 'role:karyawan'])->group(function () {
     // Karyawan izin
     Route::resource('izin', LeaveRequestController::class)
         ->only(['index', 'create', 'store'])
@@ -26,17 +28,22 @@ Route::middleware(['auth', 'role:karyawan'])->group(function(){
 
     // Karyawan Lembur
     Route::resource('lembur', OvertimeRequestController::class)
-    ->only('index', 'create', 'store')
-    ->parameters(['lembur' => 'overtimeRequest']);
+        ->only('index', 'create', 'store')
+        ->parameters(['lembur' => 'overtimeRequest']);
 
 
     // Karyawan Dinas luar
     Route::resource('dinas', OfficeTripController::class)
         ->only('index', 'create', 'store')
         ->parameters(['dinas' => 'officeTrip']);
+
+    // absen
+    Route::get('/absensi', [AttendanceController::class, 'index'])->name('absensi.index');
+    Route::post('/absensi/check-in', [AttendanceController::class, 'checkIn'])->name('absensi.checkin');
+    Route::post('/absensi/check-out', [AttendanceController::class, 'checkOut'])->name('absensi.checkout');
 });
 
-Route::middleware(['auth', 'role:atasan'])->group(function(){
+Route::middleware(['auth', 'role:atasan'])->group(function () {
     // Halaman gabungan
     Route::get('/approval', [ApprovalController::class, 'index'])->name('approval.index');
 
@@ -52,5 +59,5 @@ Route::middleware(['auth', 'role:atasan'])->group(function(){
 });
 
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';
