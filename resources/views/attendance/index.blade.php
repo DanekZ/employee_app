@@ -118,6 +118,7 @@
                         <th class="px-6 py-3">Jam Keluar</th>
                         <th class="px-6 py-3">Status</th>
                         <th class="px-6 py-3">Koordinat (Lat, Lng)</th>
+                        <th class="px-6 py-3">Lokasi (Google Maps)</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -134,10 +135,22 @@
                             <td class="px-6 py-4 text-xs font-mono text-gray-500">
                                 {{ $item->latitude ?? '-' }}, {{ $item->longitude ?? '-' }}
                             </td>
+                            <td class="px-6 py-4">
+                                @if($item->latitude && $item->longitude)
+                                    <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" 
+                                       target="_blank" 
+                                       rel="noopener noreferrer" 
+                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold border border-blue-200 transition-colors">
+                                        <i class="fa-solid fa-map-location-dot text-blue-600"></i> Buka Maps
+                                    </a>
+                                @else
+                                    <span class="text-xs text-gray-400">-</span>
+                                @endif
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-8 text-center text-gray-400">
+                            <td colspan="6" class="px-6 py-8 text-center text-gray-400">
                                 <i class="fa-solid fa-folder-open text-3xl mb-2 text-gray-300 block"></i>
                                 Belum ada riwayat presensi untuk bulan ini.
                             </td>
