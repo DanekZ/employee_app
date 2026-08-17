@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -13,19 +13,36 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-          $atasan = User::create([
-            'name' => 'Budi Atasan',
-            'email' => 'atasan@sinarta.test',
-            'password' => bcrypt('password'),
-            'role' => 'atasan',
-        ]);
+        // 1. Atasan: Novi
+        $novi = User::updateOrCreate(
+            ['email' => 'novi@sinarta.test'],
+            [
+                'name' => 'Novi',
+                'password' => Hash::make('password'),
+                'role' => 'atasan',
+            ]
+        );
 
-        User::create([
-            'name' => 'Zidane Karyawan',
-            'email' => 'karyawan@sinarta.test',
-            'password' => bcrypt('password'),
-            'role' => 'karyawan',
-            'atasan_id' => $atasan->id,
-        ]);
+        // 2. Karyawan biasa: Sela Saputri
+        User::updateOrCreate(
+            ['email' => 'sela@sinarta.test'],
+            [
+                'name' => 'Sela Saputri',
+                'password' => Hash::make('password'),
+                'role' => 'karyawan',
+                'atasan_id' => $novi->id,
+            ]
+        );
+
+        // 3. Karyawan biasa: Denissa Putri
+        User::updateOrCreate(
+            ['email' => 'denissa@sinarta.test'],
+            [
+                'name' => 'Denissa Putri',
+                'password' => Hash::make('password'),
+                'role' => 'karyawan',
+                'atasan_id' => $novi->id,
+            ]
+        );
     }
 }
