@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Inertia\Inertia;
 use App\Models\LeaveRequest;
-
+use Illuminate\Http\Request;
 
 class LeaveRequestController extends Controller
 {
@@ -16,9 +14,9 @@ class LeaveRequestController extends Controller
     {
         $leaveRequest = $request->user()->leaveRequests()->latest()->get();
 
-        return Inertia::render('leave/index', [
+        return view('leave.index', [
             'leaveRequests' => $leaveRequest,
-        ]); 
+        ]);
     }
 
     /**
@@ -26,7 +24,7 @@ class LeaveRequestController extends Controller
      */
     public function create()
     {
-        return Inertia::render('leave/create');
+        return view('leave.create');
     }
 
     /**
@@ -48,7 +46,7 @@ class LeaveRequestController extends Controller
             'tanggal.required' => 'Tanggal izin wajib dipilih.',
             'tanggal.date' => 'Format tanggal tidak valid.',
             'keterangan.required' => 'Keterangan izin wajib diisi.',
-        ] );
+        ]);
 
         $request->user()->leaveRequests()->create($request->only([
             'jenis', 'tujuan', 'tanggal_mulai', 'tanggal_selesai',
@@ -58,17 +56,19 @@ class LeaveRequestController extends Controller
         return redirect()->route('izin.index')->with('success', 'pengajuan izin berhasil dikirim!');
     }
 
-    public function approve(LeaveRequest $leaveRequest){
-            $leaveRequest->update([
-                'status' => 'approved',
-                'approved_by' => auth()->id(),
-                'approved_at' => now(),
-            ]);
+    public function approve(LeaveRequest $leaveRequest)
+    {
+        $leaveRequest->update([
+            'status' => 'approved',
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+        ]);
 
-            return back()->with('success', 'Pengajuan izin disetujui.');
+        return back()->with('success', 'Pengajuan izin disetujui.');
     }
 
-    public function reject(LeaveRequest $leaveRequest){
+    public function reject(LeaveRequest $leaveRequest)
+    {
         $leaveRequest->update([
             'status' => 'rejected',
             'approved_by' => auth()->id(),
@@ -77,6 +77,7 @@ class LeaveRequestController extends Controller
 
         return back()->with('success', 'Pengajuan izin ditolak.');
     }
+
     /**
      * Display the specified resource.
      */

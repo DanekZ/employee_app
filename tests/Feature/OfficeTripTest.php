@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\User;
 use App\Models\OfficeTrip;
+use App\Models\User;
 
 test('karyawan bisa melihat halaman riwayat dinas', function () {
     $user = User::factory()->create(['role' => 'karyawan']);
@@ -86,8 +86,6 @@ test('dinas hanya menampilkan data milik user yang login', function () {
 
     $response = $this->actingAs($userA)->get(route('dinas.index'));
 
-    $response->assertInertia(fn ($page) => $page
-        ->component('officeTrip/index')
-        ->has('officeTrips', 1)
-    );
+    $response->assertViewIs('dinas.index')
+        ->assertViewHas('officeTrips', fn ($trips) => count($trips) === 1);
 });

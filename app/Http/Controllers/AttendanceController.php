@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attendance;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
@@ -20,7 +17,7 @@ class AttendanceController extends Controller
             ->orderByDesc('tanggal')
             ->get();
 
-        return Inertia::render('Attendance/Index', [
+        return view('attendance.index', [
             'today' => $today,
             'riwayat' => $riwayat,
         ]);
@@ -66,7 +63,7 @@ class AttendanceController extends Controller
             ->whereDate('tanggal', now()->toDateString())
             ->first();
 
-        if (!$attendance) {
+        if (! $attendance) {
             return back()->with('error', 'Anda belum melakukan absen masuk hari ini.');
         }
 

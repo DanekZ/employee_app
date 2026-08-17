@@ -1,17 +1,14 @@
 <?php
 
 use App\Http\Controllers\ApprovalController;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\OfficeTripController;
 use App\Http\Controllers\OvertimeRequestController;
-use App\Http\Controllers\AttendanceController;
-
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    if (!auth()->check()) {
+    if (! auth()->check()) {
         return redirect()->route('login');
     }
 
@@ -30,7 +27,6 @@ Route::middleware(['auth', 'role:karyawan'])->group(function () {
     Route::resource('lembur', OvertimeRequestController::class)
         ->only('index', 'create', 'store')
         ->parameters(['lembur' => 'overtimeRequest']);
-
 
     // Karyawan Dinas luar
     Route::resource('dinas', OfficeTripController::class)
@@ -58,6 +54,5 @@ Route::middleware(['auth', 'role:atasan'])->group(function () {
     Route::patch('/dinas/{officeTrip}/reject', [OfficeTripController::class, 'reject'])->name('dinas.reject');
 });
 
-
-require __DIR__ . '/settings.php';
-require __DIR__ . '/auth.php';
+require __DIR__.'/settings.php';
+require __DIR__.'/auth.php';

@@ -3,24 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class OvertimeRequestController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $overtimeRequests = $request->user()->overtimeRequests()->latest()->get();
 
-        return Inertia::render('overtime/index', [
-            'overtimeRequests' => $overtimeRequests
+        return view('lembur.index', [
+            'overtimeRequests' => $overtimeRequests,
         ]);
     }
 
-    public function create(){
-        return Inertia::render('overtime/create');
+    public function create()
+    {
+        return view('lembur.create');
     }
 
-    public function store(Request $request){
-         $request->validate([
+    public function store(Request $request)
+    {
+        $request->validate([
             'tanggal' => 'required|date',
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
@@ -35,9 +37,8 @@ class OvertimeRequestController extends Controller
             'alasan.required' => 'Alasan lembur wajib diisi.',
         ]);
 
-
         $request->user()->overtimeRequests()->create($request->only([
-            'tanggal', 'jam_mulai', 'jam_selesai', 'lokasi_lembur', 'alasan'
+            'tanggal', 'jam_mulai', 'jam_selesai', 'lokasi_lembur', 'alasan',
         ]));
 
         return redirect()->route('lembur.index')->with('success', 'Pengajuan lembur berhasil dikirim.');

@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\User;
 use App\Models\LeaveRequest;
+use App\Models\User;
 
 test('karyawan bisa melihat halaman riwayat izin', function () {
     $user = User::factory()->create(['role' => 'karyawan']);
@@ -94,8 +94,6 @@ test('izin hanya menampilkan data milik user yang login', function () {
 
     $response = $this->actingAs($userA)->get(route('izin.index'));
 
-    $response->assertInertia(fn ($page) => $page
-        ->component('leave/index')
-        ->has('leaveRequests', 1)
-    );
+    $response->assertViewIs('leave.index')
+        ->assertViewHas('leaveRequests', fn ($requests) => count($requests) === 1);
 });

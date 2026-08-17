@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\User;
 use App\Models\OvertimeRequest;
+use App\Models\User;
 
 test('karyawan bisa melihat halaman riwayat lembur', function () {
     $user = User::factory()->create(['role' => 'karyawan']);
@@ -68,8 +68,6 @@ test('lembur hanya menampilkan data milik user yang login', function () {
 
     $response = $this->actingAs($userA)->get(route('lembur.index'));
 
-    $response->assertInertia(fn ($page) => $page
-        ->component('overtime/index')
-        ->has('overtimeRequests', 1)
-    );
+    $response->assertViewIs('lembur.index')
+        ->assertViewHas('overtimeRequests', fn ($requests) => count($requests) === 1);
 });

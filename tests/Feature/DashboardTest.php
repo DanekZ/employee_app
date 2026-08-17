@@ -3,14 +3,14 @@
 use App\Models\User;
 
 test('guests are redirected to the login page', function () {
-    $response = $this->get('/dashboard');
+    $response = $this->get('/');
     $response->assertRedirect('/login');
 });
 
-test('authenticated users can visit the dashboard', function () {
-    $user = User::factory()->create();
+test('authenticated users are redirected from home route', function () {
+    $user = User::factory()->create(['role' => 'karyawan']);
     $this->actingAs($user);
 
-    $response = $this->get('/dashboard');
-    $response->assertStatus(200);
+    $response = $this->get('/');
+    $response->assertRedirect(route('absensi.index'));
 });

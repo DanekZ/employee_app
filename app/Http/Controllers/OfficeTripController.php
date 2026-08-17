@@ -3,23 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class OfficeTripController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $officeTrips = $request->user()->officeTrips()->latest()->get();
 
-        return Inertia::render('officeTrip/index', [
-            'officeTrips' => $officeTrips
+        return view('dinas.index', [
+            'officeTrips' => $officeTrips,
         ]);
     }
 
-    public function create(){
-        return Inertia::render('officeTrip/create');
+    public function create()
+    {
+        return view('dinas.create');
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'tanggal' => 'required|date',
             'tujuan_alamat' => 'required|string|max:255',
@@ -38,12 +40,9 @@ class OfficeTripController extends Controller
         ]);
 
         $request->user()->officeTrips()->create($request->only([
-            'tanggal', 'tujuan_alamat', 'jam_keluar', 'jam_kembali', 'alat_transportasi', 'alasan'
+            'tanggal', 'tujuan_alamat', 'jam_keluar', 'jam_kembali', 'alat_transportasi', 'alasan',
         ]));
 
         return redirect()->route('dinas.index')->with('success', 'Pengajuan dinas berhasil dikirim.');
     }
-    
-    
 }
-
