@@ -65,3 +65,14 @@ test('atasan can filter laporan by custom date range', function () {
     $response->assertSee('Siti Rahma');
     $response->assertSee('Perlu Evaluasi');
 });
+
+test('admin role can access both laporan visualisasi and karyawan features', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    $responseLaporan = $this->actingAs($admin)->get(route('approval.laporan'));
+    $responseLaporan->assertStatus(200);
+    $responseLaporan->assertSee('Laporan Visualisasi Presensi Karyawan');
+
+    $responseAbsensi = $this->actingAs($admin)->get(route('absensi.index'));
+    $responseAbsensi->assertStatus(200);
+});

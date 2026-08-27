@@ -7,13 +7,18 @@
 
     <title>{{ config('app.name', 'Employee App') }}</title>
 
-    <!-- Fonts -->
+    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.bunny.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-    <!-- Tailwind CSS & Vite -->
-    @vite(['resources/js/app.ts'])
+    <!-- Tailwind CSS & Vite (CSS dimuat langsung di head) -->
+    @vite(['resources/css/app.css', 'resources/js/app.ts'])
+
+    <!-- Alpine.js for lightweight UI interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>[x-cloak] { display: none !important; }</style>
 </head>
 <body class="bg-slate-900 text-gray-100 font-sans antialiased min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md bg-white text-gray-800 rounded-2xl shadow-2xl overflow-hidden p-8 border border-gray-100">
@@ -21,7 +26,7 @@
             <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-rose-800 via-rose-700 to-amber-600 flex items-center justify-center text-white font-bold text-2xl shadow-lg mb-3">
                 <i class="fa-solid fa-user-gear"></i>
             </div>
-            <h1 class="text-2xl font-bold text-gray-900">E-Employee System</h1>
+            <h1 class="text-2xl font-bold text-gray-900">Sinarta Employee System</h1>
             <p class="text-sm text-gray-500 mt-1">Sistem Absensi & Management Karyawan</p>
         </div>
 

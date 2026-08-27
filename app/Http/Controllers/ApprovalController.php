@@ -156,4 +156,78 @@ class ApprovalController extends Controller
             'employeeStats' => $employeeStats,
         ]);
     }
+
+    public function rekap(Request $request)
+    {
+        $userId = $request->input('user_id');
+        $status = $request->input('status');
+        $bulan = $request->input('bulan');
+
+        $userRole = $request->user()->role;
+        $bawahanIds = $userRole === 'atasan' ? $request->user()->bawahan()->pluck('id') : null;
+
+        $applyFilters = function ($query) use ($userId, $status, $bulan, $userRole, $bawahanIds) {
+            if ($userRole === 'atasan' && $bawahanIds !== null) {
+                $query->whereIn('user_id', $bawahanIds);
+            }
+            if ($userId) {
+                $query->where('user_id', $userId);
+            }
+            if ($status) {
+                $query->where('status', $status);
+            }
+            if ($bulan) {
+                $parsed = Carbon::parse($bulan);
+                $query->whereYear('created_at', $parsed->year)
+                    ->whereMonth('created_at', $parsed->month);
+            }
+
+            return $query;
+        };
+
+        $izinQuery = LeaveRequest::with('user');
+        $applyFilters($izinQuery);
+        $izin = (clone $izinQuery)->latest()->paginate(15, ['*'], 'izin_page')->withQueryString();
+
+        $lemburQuery = OvertimeRequest::with('user');
+        $applyFilters($lemburQuery);
+        $lembur = (clone $lemburQuery)->latest()->paginate(15, ['*'], 'lembur_page')->withQueryString();
+
+        $dinasQuery = OfficeTrip::with('user');
+        $applyFilters($dinasQuery);
+        $dinas = (clone $dinasQuery)->latest()->paginate(15, ['*'], 'dinas_page')->withQueryString();
+
+        $totalIzinApproved = (clone $izinQuery)->where('status', 'approved')->count();
+        $totalIzinPending = (clone $izinQuery)->where('status', 'pending')->count();
+        $totalIzinRejected = (clone $izinQuery)->where('status', 'rejected')->count();
+
+        $totalLemburApproved = (clone $lemburQuery)->where('status', 'approved')->count();
+        $totalLemburPending = (clone $lemburQuery)->where('status', 'pending')->count();
+        $totalLemburRejected = (clone $lemburQuery)->where('status', 'rejected')->count();
+
+        $totalDinasApproved = (clone $dinasQuery)->where('status', 'approved')->count();
+        $totalDinasPending = (clone $dinasQuery)->where('status', 'pending')->count();
+        $totalDinasRejected = (clone $dinasQuery)->where('status', 'rejected')->count();
+
+        $karyawanList = User::whereIn('role', ['karyawan', 'admin'])->orderBy('name')->get();
+
+        return view('approval.rekap', [
+            'izin' => $izin,
+            'lembur' => $lembur,
+            'dinas' => $dinas,
+            'karyawanList' => $karyawanList,
+            'selectedUserId' => $userId,
+            'selectedStatus' => $status,
+            'selectedBulan' => $bulan,
+            'totalIzinApproved' => $totalIzinApproved,
+            'totalIzinPending' => $totalIzinPending,
+            'totalIzinRejected' => $totalIzinRejected,
+            'totalLemburApproved' => $totalLemburApproved,
+            'totalLemburPending' => $totalLemburPending,
+            'totalLemburRejected' => $totalLemburRejected,
+            'totalDinasApproved' => $totalDinasApproved,
+            'totalDinasPending' => $totalDinasPending,
+            'totalDinasRejected' => $totalDinasRejected,
+        ]);
+    }
 }

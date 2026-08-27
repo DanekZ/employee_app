@@ -17,18 +17,18 @@ Route::get('/', function () {
     );
 })->name('home');
 
-Route::middleware(['auth', 'role:karyawan'])->group(function () {
-    // Karyawan izin
+Route::middleware(['auth', 'role:karyawan,admin'])->group(function () {
+    // Karyawan & Admin izin
     Route::resource('izin', LeaveRequestController::class)
         ->only(['index', 'create', 'store'])
         ->parameters(['izin' => 'leaveRequest']);
 
-    // Karyawan Lembur
+    // Karyawan & Admin Lembur
     Route::resource('lembur', OvertimeRequestController::class)
         ->only('index', 'create', 'store')
         ->parameters(['lembur' => 'overtimeRequest']);
 
-    // Karyawan Dinas luar
+    // Karyawan & Admin Dinas luar
     Route::resource('dinas', OfficeTripController::class)
         ->only('index', 'create', 'store')
         ->parameters(['dinas' => 'officeTrip']);
@@ -39,11 +39,12 @@ Route::middleware(['auth', 'role:karyawan'])->group(function () {
     Route::post('/absensi/check-out', [AttendanceController::class, 'checkOut'])->name('absensi.checkout');
 });
 
-Route::middleware(['auth', 'role:atasan'])->group(function () {
-    // Halaman gabungan approval, rekap absensi, & laporan visualisasi
+Route::middleware(['auth', 'role:atasan,admin'])->group(function () {
+    // Halaman gabungan approval, rekap absensi, laporan visualisasi, & rekap pengajuan
     Route::get('/approval', [ApprovalController::class, 'index'])->name('approval.index');
     Route::get('/approval/absensi', [ApprovalController::class, 'absensi'])->name('approval.absensi');
     Route::get('/approval/laporan', [ApprovalController::class, 'laporan'])->name('approval.laporan');
+    Route::get('/approval/rekap', [ApprovalController::class, 'rekap'])->name('approval.rekap');
 
     // Approved/reject per modul
     Route::patch('/izin/{leaveRequest}/approve', [LeaveRequestController::class, 'approve'])->name('izin.approve');

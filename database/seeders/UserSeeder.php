@@ -45,7 +45,7 @@ class UserSeeder extends Seeder
             ]
         );
 
-        // 4. Karyawan biasa: 
+        // 4. Karyawan biasa:
         User::updateOrCreate(
             ['email' => 'anoriza@sinarta.test'],
             [
@@ -58,13 +58,24 @@ class UserSeeder extends Seeder
 
         // 5. karyawan spesial
         User::updateOrCreate(
-            ['email'=>'dane@sinarta.test'],
+            ['email' => 'dane@sinarta.test'],
             [
                 'name' => 'zidane',
                 'password' => Hash::make('password'),
                 'role' => 'karyawan',
-                'atasan_id' => $novi->id
+                'atasan_id' => $novi->id,
             ]
-            );
+        );
+
+        // 6. Admin
+        User::updateOrCreate(
+            ['email' => 'admin@sinarta.test'],
+            [
+                'name' => 'Administrator',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+                'atasan_id' => $novi->id,
+            ]
+        );
     }
 }

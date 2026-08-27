@@ -7,16 +7,18 @@
 
     <title>{{ config('app.name', 'Employee App') }}</title>
 
-    <!-- Fonts -->
+    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.bunny.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-    <!-- Tailwind CSS & Vite -->
-    @vite(['resources/js/app.ts'])
+    <!-- Tailwind CSS & Vite (CSS dimuat langsung di head) -->
+    @vite(['resources/css/app.css', 'resources/js/app.ts'])
 
     <!-- Alpine.js for lightweight UI interactivity -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>[x-cloak] { display: none !important; }</style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans antialiased min-h-screen flex flex-col" x-data="{ mobileMenuOpen: false, profileDropdownOpen: false }">
     
@@ -44,10 +46,43 @@
                                    class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('approval.absensi') ? 'bg-rose-50 text-rose-800 font-semibold' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
                                     <i class="fa-solid fa-calendar-days mr-2"></i> Rekap Absensi Karyawan
                                 </a>
-                                <!-- <a href="{{ route('approval.laporan') }}" 
+                                <a href="{{ route('approval.rekap') }}" 
+                                   class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('approval.rekap') ? 'bg-rose-50 text-rose-800 font-semibold' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
+                                    <i class="fa-solid fa-folder-closed mr-2"></i> Rekap Pengajuan
+                                </a>
+                                <a href="{{ route('approval.laporan') }}" 
                                    class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('approval.laporan') ? 'bg-rose-50 text-rose-800 font-semibold' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
                                     <i class="fa-solid fa-chart-pie mr-2"></i> Laporan Visualisasi
-                                </a> -->
+                                </a>
+                            @elseif(auth()->user()->role === 'admin')
+                                <a href="{{ route('absensi.index') }}" 
+                                   class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('absensi.*') ? 'bg-rose-50 text-rose-800 font-semibold' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
+                                    <i class="fa-solid fa-calendar-check mr-2"></i> Absensi
+                                </a>
+                                <a href="{{ route('izin.index') }}" 
+                                   class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('izin.*') ? 'bg-rose-50 text-rose-800 font-semibold' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
+                                    <i class="fa-solid fa-file-signature mr-2"></i> Izin
+                                </a>
+                                <a href="{{ route('lembur.index') }}" 
+                                   class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('lembur.*') ? 'bg-rose-50 text-rose-800 font-semibold' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
+                                    <i class="fa-solid fa-business-time mr-2"></i> Lembur
+                                </a>
+                                <a href="{{ route('dinas.index') }}" 
+                                   class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('dinas.*') ? 'bg-rose-50 text-rose-800 font-semibold' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
+                                    <i class="fa-solid fa-building-user mr-2"></i> Dinas Luar
+                                </a>
+                                <a href="{{ route('approval.absensi') }}" 
+                                   class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('approval.absensi') ? 'bg-rose-50 text-rose-800 font-semibold' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
+                                    <i class="fa-solid fa-calendar-days mr-2"></i> Rekap Absensi
+                                </a>
+                                <a href="{{ route('approval.rekap') }}" 
+                                   class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('approval.rekap') ? 'bg-rose-50 text-rose-800 font-semibold' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
+                                    <i class="fa-solid fa-folder-closed mr-2"></i> Rekap Pengajuan
+                                </a>
+                                <a href="{{ route('approval.laporan') }}" 
+                                   class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('approval.laporan') ? 'bg-rose-50 text-rose-800 font-semibold' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
+                                    <i class="fa-solid fa-chart-pie mr-2"></i> Laporan Visualisasi
+                                </a>
                             @else
                                 <a href="{{ route('absensi.index') }}" 
                                    class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('absensi.*') ? 'bg-rose-50 text-rose-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
@@ -74,7 +109,7 @@
                 <div class="hidden md:flex md:items-center md:space-x-4">
                     @auth
                         <!-- User Role Badge -->
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider {{ auth()->user()->role === 'atasan' ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800' }}">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider {{ auth()->user()->role === 'atasan' ? 'bg-amber-100 text-amber-800' : (auth()->user()->role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800') }}">
                             {{ auth()->user()->role }}
                         </span>
 
@@ -134,9 +169,34 @@
                         <a href="{{ route('approval.absensi') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
                             <i class="fa-solid fa-calendar-days mr-2"></i> Rekap Absensi Karyawan
                         </a>
-                        <!-- <a href="{{ route('approval.laporan') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+                        <a href="{{ route('approval.rekap') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+                            <i class="fa-solid fa-folder-closed mr-2"></i> Rekap Pengajuan
+                        </a>
+                        <a href="{{ route('approval.laporan') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
                             <i class="fa-solid fa-chart-pie mr-2"></i> Laporan Visualisasi
-                        </a> -->
+                        </a>
+                    @elseif(auth()->user()->role === 'admin')
+                        <a href="{{ route('absensi.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+                            <i class="fa-solid fa-calendar-check mr-2"></i> Absensi
+                        </a>
+                        <a href="{{ route('izin.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+                            <i class="fa-solid fa-file-signature mr-2"></i> Izin
+                        </a>
+                        <a href="{{ route('lembur.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+                            <i class="fa-solid fa-business-time mr-2"></i> Lembur
+                        </a>
+                        <a href="{{ route('dinas.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+                            <i class="fa-solid fa-building-user mr-2"></i> Dinas Luar
+                        </a>
+                        <a href="{{ route('approval.absensi') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+                            <i class="fa-solid fa-calendar-days mr-2"></i> Rekap Absensi
+                        </a>
+                        <a href="{{ route('approval.rekap') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+                            <i class="fa-solid fa-folder-closed mr-2"></i> Rekap Pengajuan
+                        </a>
+                        <a href="{{ route('approval.laporan') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+                            <i class="fa-solid fa-chart-pie mr-2"></i> Laporan Visualisasi
+                        </a>
                     @else
                         <a href="{{ route('absensi.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
                             <i class="fa-solid fa-calendar-check mr-2"></i> Absensi
