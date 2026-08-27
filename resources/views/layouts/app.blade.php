@@ -37,9 +37,17 @@
                         @auth
                             @if(auth()->user()->role === 'atasan')
                                 <a href="{{ route('approval.index') }}" 
-                                   class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('approval.*') ? 'bg-rose-50 text-rose-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
+                                   class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('approval.index') ? 'bg-rose-50 text-rose-800 font-semibold' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
                                     <i class="fa-solid fa-list-check mr-2"></i> Approval Pengajuan
                                 </a>
+                                <a href="{{ route('approval.absensi') }}" 
+                                   class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('approval.absensi') ? 'bg-rose-50 text-rose-800 font-semibold' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
+                                    <i class="fa-solid fa-calendar-days mr-2"></i> Rekap Absensi Karyawan
+                                </a>
+                                <!-- <a href="{{ route('approval.laporan') }}" 
+                                   class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('approval.laporan') ? 'bg-rose-50 text-rose-800 font-semibold' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
+                                    <i class="fa-solid fa-chart-pie mr-2"></i> Laporan Visualisasi
+                                </a> -->
                             @else
                                 <a href="{{ route('absensi.index') }}" 
                                    class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('absensi.*') ? 'bg-rose-50 text-rose-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
@@ -123,6 +131,12 @@
                         <a href="{{ route('approval.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
                             <i class="fa-solid fa-list-check mr-2"></i> Approval Pengajuan
                         </a>
+                        <a href="{{ route('approval.absensi') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+                            <i class="fa-solid fa-calendar-days mr-2"></i> Rekap Absensi Karyawan
+                        </a>
+                        <!-- <a href="{{ route('approval.laporan') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+                            <i class="fa-solid fa-chart-pie mr-2"></i> Laporan Visualisasi
+                        </a> -->
                     @else
                         <a href="{{ route('absensi.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
                             <i class="fa-solid fa-calendar-check mr-2"></i> Absensi

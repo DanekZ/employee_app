@@ -40,8 +40,10 @@ Route::middleware(['auth', 'role:karyawan'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:atasan'])->group(function () {
-    // Halaman gabungan
+    // Halaman gabungan approval, rekap absensi, & laporan visualisasi
     Route::get('/approval', [ApprovalController::class, 'index'])->name('approval.index');
+    Route::get('/approval/absensi', [ApprovalController::class, 'absensi'])->name('approval.absensi');
+    Route::get('/approval/laporan', [ApprovalController::class, 'laporan'])->name('approval.laporan');
 
     // Approved/reject per modul
     Route::patch('/izin/{leaveRequest}/approve', [LeaveRequestController::class, 'approve'])->name('izin.approve');
