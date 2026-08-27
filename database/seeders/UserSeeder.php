@@ -55,5 +55,16 @@ class UserSeeder extends Seeder
                 'atasan_id' => $novi->id,
             ]
         );
+
+        // 5. karyawan spesial
+        User::updateOrCreate(
+            ['email'=>'dane@sinarta.test'],
+            [
+                'name' => 'zidane',
+                'password' => Hash::make('password'),
+                'role' => 'karyawan',
+                'atasan_id' => $novi->id
+            ]
+            );
     }
 }
