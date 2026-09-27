@@ -77,5 +77,17 @@ class UserSeeder extends Seeder
                 'atasan_id' => $novi->id,
             ]
         );
+
+        // 7. Atasan:Rasyadah
+        User::updateOrCreate(
+            ['email' => 'rasyadah@sinarta.test'],
+            [
+                'name' => 'Rasyadah',
+                'password' => Hash::make('password'),
+                'role' => 'atasan',
+                'atasan_id' => $novi->id,
+            ]
+        );
+        
     }
 }
