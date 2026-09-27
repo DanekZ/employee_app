@@ -84,7 +84,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Rasyadah',
                 'password' => Hash::make('password'),
-                'role' => 'atasan',
+                'role' => 'admin',
                 'atasan_id' => $novi->id,
             ]
         );
