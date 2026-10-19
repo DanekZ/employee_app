@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Employee App') }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('logo_sinarta.png') }}">
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -20,14 +21,13 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>[x-cloak] { display: none !important; }</style>
 </head>
-<body class="bg-slate-900 text-gray-100 font-sans antialiased min-h-screen flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-white text-gray-800 rounded-2xl shadow-2xl overflow-hidden p-8 border border-gray-100">
+<body class="flex items-center justify-center min-h-screen p-4 font-sans antialiased text-gray-100 bg-slate-900">
+    <div class="w-full max-w-md p-8 overflow-hidden text-gray-800 bg-white border border-gray-100 shadow-2xl rounded-2xl">
         <div class="flex flex-col items-center mb-6 text-center">
-            <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-rose-800 via-rose-700 to-amber-600 flex items-center justify-center text-white font-bold text-2xl shadow-lg mb-3">
-                <i class="fa-solid fa-user-gear"></i>
+            <div class="flex items-center justify-center mb-3 text-2xl font-bold text-white w-30 h-30 rounded-2xl">
+                <img src="{{ asset('logo.png') }}" alt="Logo" class="object-contain w-full h-full p-2">
             </div>
-            <h1 class="text-2xl font-bold text-gray-900">Sinarta Employee System</h1>
-            <p class="text-sm text-gray-500 mt-1">Sistem Absensi & Management Karyawan</p>
+            <p class="mt-1 text-sm text-gray-500">Sistem Absensi & Management Karyawan</p>
         </div>
 
         @yield('content')

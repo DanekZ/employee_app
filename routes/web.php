@@ -5,6 +5,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\OfficeTripController;
 use App\Http\Controllers\OvertimeRequestController;
+use App\Http\Controllers\PayrollController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -55,6 +56,20 @@ Route::middleware(['auth', 'role:atasan,admin'])->group(function () {
 
     Route::patch('/dinas/{officeTrip}/approve', [OfficeTripController::class, 'approve'])->name('dinas.approve');
     Route::patch('/dinas/{officeTrip}/reject', [OfficeTripController::class, 'reject'])->name('dinas.reject');
+});
+
+// Slip gaji karyawan
+Route::middleware(['auth'])->group(function () {
+    Route::get('/slip-gaji-saya', [PayrollController::class, 'myPayslips'])->name('penggajian.my-payslips');
+});
+
+// Manajemen Penggajian khusus Role Atasan
+Route::middleware(['auth', 'role:atasan'])->group(function () {
+    Route::get('/penggajian', [PayrollController::class, 'index'])->name('penggajian.index');
+    Route::post('/penggajian/generate', [PayrollController::class, 'generate'])->name('penggajian.generate');
+    Route::post('/penggajian/publish', [PayrollController::class, 'publish'])->name('penggajian.publish');
+    Route::post('/penggajian/settings', [PayrollController::class, 'updateSettings'])->name('penggajian.update-settings');
+    Route::patch('/penggajian/employee/{user}/salary', [PayrollController::class, 'updateEmployeeSalary'])->name('penggajian.update-employee-salary');
 });
 
 require __DIR__.'/settings.php';

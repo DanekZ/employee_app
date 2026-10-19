@@ -55,7 +55,7 @@ class ApprovalController extends Controller
         }
 
         $attendances = $query->paginate(20)->withQueryString();
-        $karyawanList = User::where('role', 'karyawan')->orderBy('name')->get();
+        $karyawanList = User::whereIn('role', ['karyawan', 'admin'])->orderBy('name')->get();
 
         return view('approval.absensi', [
             'attendances' => $attendances,
@@ -70,6 +70,9 @@ class ApprovalController extends Controller
         $userId = $request->input('user_id');
 
         $query = Attendance::with('user')
+            ->whereHas('user', function ($q) {
+                $q->whereIn('role', ['karyawan', 'admin']);
+            })
             ->whereBetween('tanggal', [$startDate, $endDate]);
 
         if ($userId) {
@@ -99,11 +102,11 @@ class ApprovalController extends Controller
             $dailyTelat[] = $dayRecords->where('status', 'telat')->count();
         }
 
-        $karyawanQuery = User::where('role', 'karyawan');
+        $karyawanQuery = User::whereIn('role', ['karyawan', 'admin']);
         if ($userId) {
             $karyawanQuery->where('id', $userId);
         }
-        $karyawanList = User::where('role', 'karyawan')->orderBy('name')->get();
+        $karyawanList = User::whereIn('role', ['karyawan', 'admin'])->orderBy('name')->get();
         $targetKaryawan = $karyawanQuery->orderBy('name')->get();
 
         $employeeStats = [];
