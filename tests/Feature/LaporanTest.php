@@ -76,3 +76,26 @@ test('admin role can access both laporan visualisasi and karyawan features', fun
     $responseAbsensi = $this->actingAs($admin)->get(route('absensi.index'));
     $responseAbsensi->assertStatus(200);
 });
+
+test('laporan includes attendance data and employee statistics for admin role users', function () {
+    $atasan = User::factory()->create(['role' => 'atasan']);
+    $adminUser = User::factory()->create([
+        'name' => 'Admin Super',
+        'role' => 'admin',
+        'atasan_id' => $atasan->id,
+    ]);
+
+    Attendance::create([
+        'user_id' => $adminUser->id,
+        'tanggal' => now()->toDateString(),
+        'jam_masuk' => '07:50:00',
+        'jam_keluar' => '17:00:00',
+        'status' => 'hadir',
+    ]);
+
+    $response = $this->actingAs($atasan)->get(route('approval.laporan'));
+
+    $response->assertStatus(200);
+    $response->assertSee('Admin Super');
+    $response->assertSee('Sangat Disiplin');
+});
