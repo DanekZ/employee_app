@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OvertimeRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class OvertimeRequestController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         $overtimeRequests = $request->user()->overtimeRequests()->latest()->get();
 
@@ -15,12 +18,12 @@ class OvertimeRequestController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): View
     {
         return view('lembur.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'tanggal' => 'required|date',
@@ -42,5 +45,27 @@ class OvertimeRequestController extends Controller
         ]));
 
         return redirect()->route('lembur.index')->with('success', 'Pengajuan lembur berhasil dikirim.');
+    }
+
+    public function approve(OvertimeRequest $overtimeRequest): RedirectResponse
+    {
+        $overtimeRequest->update([
+            'status' => 'approved',
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+        ]);
+
+        return back()->with('success', 'Pengajuan lembur disetujui.');
+    }
+
+    public function reject(OvertimeRequest $overtimeRequest): RedirectResponse
+    {
+        $overtimeRequest->update([
+            'status' => 'rejected',
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+        ]);
+
+        return back()->with('success', 'Pengajuan lembur ditolak.');
     }
 }

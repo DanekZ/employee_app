@@ -89,3 +89,33 @@ test('dinas hanya menampilkan data milik user yang login', function () {
     $response->assertViewIs('dinas.index')
         ->assertViewHas('officeTrips', fn ($trips) => count($trips) === 1);
 });
+
+test('atasan can approve office trip request', function () {
+    $atasan = User::factory()->create(['role' => 'atasan']);
+    $karyawan = User::factory()->create(['role' => 'karyawan', 'atasan_id' => $atasan->id]);
+    $officeTrip = OfficeTrip::factory()->create(['user_id' => $karyawan->id, 'status' => 'pending']);
+
+    $response = $this->actingAs($atasan)->patch(route('dinas.approve', $officeTrip));
+
+    $response->assertRedirect();
+    $this->assertDatabaseHas('office_trips', [
+        'id' => $officeTrip->id,
+        'status' => 'approved',
+        'approved_by' => $atasan->id,
+    ]);
+});
+
+test('atasan can reject office trip request', function () {
+    $atasan = User::factory()->create(['role' => 'atasan']);
+    $karyawan = User::factory()->create(['role' => 'karyawan', 'atasan_id' => $atasan->id]);
+    $officeTrip = OfficeTrip::factory()->create(['user_id' => $karyawan->id, 'status' => 'pending']);
+
+    $response = $this->actingAs($atasan)->patch(route('dinas.reject', $officeTrip));
+
+    $response->assertRedirect();
+    $this->assertDatabaseHas('office_trips', [
+        'id' => $officeTrip->id,
+        'status' => 'rejected',
+        'approved_by' => $atasan->id,
+    ]);
+});

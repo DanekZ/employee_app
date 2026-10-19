@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OfficeTrip;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class OfficeTripController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         $officeTrips = $request->user()->officeTrips()->latest()->get();
 
@@ -15,12 +18,12 @@ class OfficeTripController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): View
     {
         return view('dinas.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'tanggal' => 'required|date',
@@ -44,5 +47,27 @@ class OfficeTripController extends Controller
         ]));
 
         return redirect()->route('dinas.index')->with('success', 'Pengajuan dinas berhasil dikirim.');
+    }
+
+    public function approve(OfficeTrip $officeTrip): RedirectResponse
+    {
+        $officeTrip->update([
+            'status' => 'approved',
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+        ]);
+
+        return back()->with('success', 'Pengajuan dinas disetujui.');
+    }
+
+    public function reject(OfficeTrip $officeTrip): RedirectResponse
+    {
+        $officeTrip->update([
+            'status' => 'rejected',
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+        ]);
+
+        return back()->with('success', 'Pengajuan dinas ditolak.');
     }
 }

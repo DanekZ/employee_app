@@ -71,3 +71,33 @@ test('lembur hanya menampilkan data milik user yang login', function () {
     $response->assertViewIs('lembur.index')
         ->assertViewHas('overtimeRequests', fn ($requests) => count($requests) === 1);
 });
+
+test('atasan can approve overtime request', function () {
+    $atasan = User::factory()->create(['role' => 'atasan']);
+    $karyawan = User::factory()->create(['role' => 'karyawan', 'atasan_id' => $atasan->id]);
+    $overtime = OvertimeRequest::factory()->create(['user_id' => $karyawan->id, 'status' => 'pending']);
+
+    $response = $this->actingAs($atasan)->patch(route('lembur.approve', $overtime));
+
+    $response->assertRedirect();
+    $this->assertDatabaseHas('overtime_requests', [
+        'id' => $overtime->id,
+        'status' => 'approved',
+        'approved_by' => $atasan->id,
+    ]);
+});
+
+test('atasan can reject overtime request', function () {
+    $atasan = User::factory()->create(['role' => 'atasan']);
+    $karyawan = User::factory()->create(['role' => 'karyawan', 'atasan_id' => $atasan->id]);
+    $overtime = OvertimeRequest::factory()->create(['user_id' => $karyawan->id, 'status' => 'pending']);
+
+    $response = $this->actingAs($atasan)->patch(route('lembur.reject', $overtime));
+
+    $response->assertRedirect();
+    $this->assertDatabaseHas('overtime_requests', [
+        'id' => $overtime->id,
+        'status' => 'rejected',
+        'approved_by' => $atasan->id,
+    ]);
+});
