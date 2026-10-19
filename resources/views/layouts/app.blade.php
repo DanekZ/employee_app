@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Employee App') }}</title>
+    <title>@hasSection('title')@yield('title') - @endif{{ config('app.name', 'sinartamjs') }}</title>
 
     <link rel="icon" type="image/png" href="{{ asset('logo_sinarta.png') }}">
     <!-- Fonts & Icons -->
@@ -337,7 +337,7 @@
 
     <!-- Footer -->
     <footer class="py-4 text-xs text-center text-gray-500 bg-white border-t border-gray-200">
-        &copy; {{ date('Y') }} Employee App System. All rights reserved.
+        &copy; {{ date('Y') }} sinartamjs. All rights reserved.
     </footer>
 </body>
 </html>
