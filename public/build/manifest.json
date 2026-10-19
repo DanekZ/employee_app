@@ -1,16 +1,16 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-CPvSatCD.css",
+    "file": "assets/app-DtUNM0cn.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.ts": {
-    "file": "assets/app-BqV-jEqu.js",
+    "file": "assets/app-BZYt-nFa.js",
     "name": "app",
     "src": "resources/js/app.ts",
     "isEntry": true,
     "css": [
-      "assets/app-CPvSatCD.css"
+      "assets/app-DtUNM0cn.css"
     ]
   }
 }
