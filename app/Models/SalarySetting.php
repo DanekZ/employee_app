@@ -12,5 +12,6 @@ class SalarySetting extends Model
         'potongan_per_hari_alpha',
         'potongan_per_hari_izin',
         'uang_saku_dinas_per_hari',
+        'uang_bensin_per_dinas',
     ];
 }

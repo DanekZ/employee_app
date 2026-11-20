@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\OfficeTrip;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -11,7 +12,10 @@ class OfficeTripController extends Controller
 {
     public function index(Request $request): View
     {
-        $officeTrips = $request->user()->officeTrips()->latest()->get();
+        $officeTrips = $request->user()->officeTrips()
+            ->with('menumpangDengan')
+            ->latest()
+            ->get();
 
         return view('dinas.index', [
             'officeTrips' => $officeTrips,
@@ -20,17 +24,26 @@ class OfficeTripController extends Controller
 
     public function create(): View
     {
-        return view('dinas.create');
+        $rekanKerja = User::where('id', '!=', auth()->id())
+            ->whereIn('role', ['karyawan', 'admin'])
+            ->orderBy('name')
+            ->get();
+
+        return view('dinas.create', [
+            'rekanKerja' => $rekanKerja,
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'tanggal' => 'required|date',
             'tujuan_alamat' => 'required|string|max:255',
             'jam_keluar' => 'required|date_format:H:i',
             'jam_kembali' => 'required|date_format:H:i|after:jam_keluar',
             'alat_transportasi' => 'required|in:kendaraan_dinas,kendaraan_pribadi,transportasi_umum',
+            'peran_kendaraan' => 'nullable|in:bawa_sendiri,menumpang',
+            'menumpang_user_id' => 'nullable|required_if:peran_kendaraan,menumpang|exists:users,id',
             'alasan' => 'required|string',
         ], [
             'tanggal.required' => 'Tanggal dinas wajib dipilih.',
@@ -39,12 +52,21 @@ class OfficeTripController extends Controller
             'jam_kembali.required' => 'Jam kembali wajib diisi.',
             'jam_kembali.after' => 'Jam kembali harus setelah jam keluar.',
             'alat_transportasi.required' => 'Alat transportasi wajib dipilih.',
+            'menumpang_user_id.required_if' => 'Silakan pilih rekan kerja yang Anda tumpangi.',
             'alasan.required' => 'Alasan dinas wajib diisi.',
         ]);
 
-        $request->user()->officeTrips()->create($request->only([
-            'tanggal', 'tujuan_alamat', 'jam_keluar', 'jam_kembali', 'alat_transportasi', 'alasan',
-        ]));
+        if ($validated['alat_transportasi'] === 'kendaraan_pribadi') {
+            $validated['peran_kendaraan'] = $validated['peran_kendaraan'] ?? 'bawa_sendiri';
+            if ($validated['peran_kendaraan'] === 'bawa_sendiri') {
+                $validated['menumpang_user_id'] = null;
+            }
+        } else {
+            $validated['peran_kendaraan'] = null;
+            $validated['menumpang_user_id'] = null;
+        }
+
+        $request->user()->officeTrips()->create($validated);
 
         return redirect()->route('dinas.index')->with('success', 'Pengajuan dinas berhasil dikirim.');
     }

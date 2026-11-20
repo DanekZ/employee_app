@@ -301,8 +301,19 @@
                                 <td class="px-6 py-4 font-medium text-gray-800">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}</td>
                                 <td class="px-6 py-4 text-gray-800">{{ $item->tujuan_alamat }}</td>
                                 <td class="px-6 py-4 text-xs">
-                                    <span class="block font-mono">{{ $item->jam_keluar }} - {{ $item->jam_kembali }}</span>
-                                    <span class="capitalize text-gray-400">{{ str_replace('_', ' ', $item->alat_transportasi) }}</span>
+                                    <span class="block font-mono text-gray-800">{{ $item->jam_keluar }} - {{ $item->jam_kembali }}</span>
+                                    <span class="capitalize text-gray-500">{{ str_replace('_', ' ', $item->alat_transportasi) }}</span>
+                                    @if($item->alat_transportasi === 'kendaraan_pribadi')
+                                        @if($item->peran_kendaraan === 'bawa_sendiri')
+                                            <span class="block mt-1 text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 w-fit">
+                                                <i class="fa-solid fa-gas-pump"></i> Bawa Sendiri (+Bensin)
+                                            </span>
+                                        @elseif($item->peran_kendaraan === 'menumpang')
+                                            <span class="block mt-1 text-[11px] font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 w-fit">
+                                                <i class="fa-solid fa-user-group"></i> Numpang: {{ $item->menumpangDengan->name ?? '-' }}
+                                            </span>
+                                        @endif
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 text-xs text-gray-500 max-w-xs truncate">{{ $item->alasan }}</td>
                                 <td class="px-6 py-4 text-center">

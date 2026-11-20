@@ -8,15 +8,20 @@
             <h1 class="text-2xl font-bold text-gray-900">Data Absensi Karyawan Keseluruhan</h1>
             <p class="text-sm text-gray-500 mt-0.5">Pantau riwayat dan catatan kehadiran seluruh karyawan secara real-time.</p>
         </div>
-        <div class="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-200 text-right">
-            <span class="text-xs text-gray-400 block font-medium uppercase">Total Data Terfilter</span>
-            <span class="text-base font-bold text-rose-800">{{ $attendances->total() }} Catatan</span>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('approval.laporan', request()->query()) }}" class="py-2.5 px-4 bg-gray-900 hover:bg-black text-white rounded-xl text-sm font-semibold shadow-sm transition-all flex items-center gap-2">
+                <i class="fa-solid fa-print text-rose-400"></i> Cetak Laporan / PDF
+            </a>
+            <div class="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-200 text-right">
+                <span class="text-xs text-gray-400 block font-medium uppercase">Total Data Terfilter</span>
+                <span class="text-base font-bold text-rose-800">{{ $attendances->total() }} Catatan</span>
+            </div>
         </div>
     </div>
 
     <!-- Filter Card -->
     <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-200">
-        <form method="GET" action="{{ route('approval.absensi') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <form method="GET" action="{{ route('approval.absensi') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <!-- Filter Karyawan -->
             <div>
                 <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1.5">Pilih Karyawan</label>
@@ -30,10 +35,17 @@
                 </select>
             </div>
 
-            <!-- Filter Tanggal -->
+            <!-- Filter Tanggal Mulai -->
             <div>
-                <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1.5">Filter Tanggal Spesifik</label>
-                <input type="date" name="tanggal" value="{{ request('tanggal') }}" 
+                <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1.5">Tanggal Mulai</label>
+                <input type="date" name="tanggal_mulai" value="{{ request('tanggal_mulai') }}" 
+                       class="w-full text-sm border-gray-300 rounded-xl focus:ring-rose-500 focus:border-rose-500 bg-gray-50/50 py-2">
+            </div>
+
+            <!-- Filter Tanggal Selesai -->
+            <div>
+                <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1.5">Tanggal Selesai</label>
+                <input type="date" name="tanggal_selesai" value="{{ request('tanggal_selesai') }}" 
                        class="w-full text-sm border-gray-300 rounded-xl focus:ring-rose-500 focus:border-rose-500 bg-gray-50/50 py-2">
             </div>
 
@@ -52,8 +64,8 @@
                 <button type="submit" class="flex-1 py-2.5 px-4 bg-rose-800 hover:bg-rose-900 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors flex items-center justify-center gap-1.5">
                     <i class="fa-solid fa-filter"></i> Filter
                 </button>
-                @if(request()->anyFilled(['user_id', 'tanggal', 'bulan', 'status']))
-                    <a href="{{ route('approval.absensi') }}" class="py-2.5 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-semibold transition-colors flex items-center justify-center">
+                @if(request()->anyFilled(['user_id', 'tanggal', 'tanggal_mulai', 'tanggal_selesai', 'bulan', 'status']))
+                    <a href="{{ route('approval.absensi') }}" class="py-2.5 px-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-semibold transition-colors flex items-center justify-center" title="Reset Filter">
                         <i class="fa-solid fa-rotate-left"></i>
                     </a>
                 @endif
@@ -74,11 +86,13 @@
                     <tr>
                         <th class="px-6 py-3">Nama Karyawan</th>
                         <th class="px-6 py-3">Tanggal</th>
-                        <th class="px-6 py-3">Jam Masuk</th>
-                        <th class="px-6 py-3">Jam Keluar</th>
-                        <th class="px-6 py-3">Status</th>
-                        <th class="px-6 py-3">Koordinat (Lat, Lng)</th>
-                        <th class="px-6 py-3">Lokasi Maps</th>
+                        <th class="px-6 py-3 text-center">Jam Masuk</th>
+                        <th class="px-6 py-3 text-center">Istirahat</th>
+                        <th class="px-6 py-3 text-center">Jam Keluar</th>
+                        <th class="px-6 py-3 text-center">Durasi Kerja</th>
+                        <th class="px-6 py-3 text-center">Status</th>
+                        <th class="px-6 py-3">Keterangan</th>
+                        <th class="px-6 py-3 text-center">Lokasi Maps</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -95,24 +109,36 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 font-medium text-gray-800">
-                                {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                            <td class="px-6 py-4 font-medium text-gray-800 whitespace-nowrap">
+                                {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('l, d F Y') }}
                             </td>
-                            <td class="px-6 py-4 text-emerald-700 font-semibold font-mono">
+                            <td class="px-6 py-4 text-center text-emerald-700 font-semibold font-mono whitespace-nowrap">
                                 {{ $item->jam_masuk ?? '-' }}
                             </td>
-                            <td class="px-6 py-4 text-rose-700 font-semibold font-mono">
+                            <td class="px-6 py-4 text-center font-mono text-xs whitespace-nowrap">
+                                @if($item->jam_istirahat_mulai || $item->jam_istirahat_selesai)
+                                    <span class="{{ $item->status_istirahat === 'telat' ? 'text-rose-700 font-semibold' : 'text-gray-700' }}">
+                                        {{ $item->jam_istirahat_mulai ?? '--:--' }} - {{ $item->jam_istirahat_selesai ?? '--:--' }}
+                                    </span>
+                                @else
+                                    <span class="text-gray-400">-</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 text-center text-rose-700 font-semibold font-mono whitespace-nowrap">
                                 {{ $item->jam_keluar ?? '-' }}
                             </td>
-                            <td class="px-6 py-4">
-                                <span class="px-2.5 py-1 text-xs font-semibold rounded-full uppercase {{ $item->status === 'hadir' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800' }}">
+                            <td class="px-6 py-4 text-center text-xs font-medium text-gray-700 whitespace-nowrap">
+                                {{ $item->durasi_kerja }}
+                            </td>
+                            <td class="px-6 py-4 text-center whitespace-nowrap">
+                                <span class="px-2.5 py-1 text-xs font-semibold rounded-full uppercase {{ $item->status === 'hadir' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800' }}">
                                     {{ $item->status }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 text-xs font-mono text-gray-500">
-                                {{ $item->latitude ?? '-' }}, {{ $item->longitude ?? '-' }}
+                            <td class="px-6 py-4 text-xs font-medium {{ $item->status === 'telat' ? 'text-rose-700' : 'text-emerald-700' }} whitespace-nowrap">
+                                {{ $item->keterangan_ketepatan }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 text-center whitespace-nowrap">
                                 @if($item->latitude && $item->longitude)
                                     <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" 
                                        target="_blank" 
@@ -127,7 +153,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-10 text-center text-gray-400">
+                            <td colspan="8" class="px-6 py-10 text-center text-gray-400">
                                 <i class="fa-solid fa-calendar-xmark text-4xl mb-2 text-gray-300 block"></i>
                                 Tidak ada data presensi karyawan yang ditemukan.
                             </td>

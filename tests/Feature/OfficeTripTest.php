@@ -119,3 +119,68 @@ test('atasan can reject office trip request', function () {
         'approved_by' => $atasan->id,
     ]);
 });
+
+test('karyawan can submit office trip with kendaraan pribadi bawa sendiri', function () {
+    $user = User::factory()->create(['role' => 'karyawan']);
+
+    $response = $this->actingAs($user)->post(route('dinas.store'), [
+        'tanggal' => '2026-08-01',
+        'tujuan_alamat' => 'Kantor Cabang',
+        'jam_keluar' => '09:00',
+        'jam_kembali' => '12:00',
+        'alat_transportasi' => 'kendaraan_pribadi',
+        'peran_kendaraan' => 'bawa_sendiri',
+        'alasan' => 'Dinas membawa motor sendiri',
+    ]);
+
+    $response->assertRedirect(route('dinas.index'));
+
+    $this->assertDatabaseHas('office_trips', [
+        'user_id' => $user->id,
+        'alat_transportasi' => 'kendaraan_pribadi',
+        'peran_kendaraan' => 'bawa_sendiri',
+        'menumpang_user_id' => null,
+    ]);
+});
+
+test('karyawan can submit office trip with kendaraan pribadi menumpang rekan kerja', function () {
+    $driver = User::factory()->create(['role' => 'karyawan']);
+    $passenger = User::factory()->create(['role' => 'karyawan']);
+
+    $response = $this->actingAs($passenger)->post(route('dinas.store'), [
+        'tanggal' => '2026-08-01',
+        'tujuan_alamat' => 'Kantor Cabang',
+        'jam_keluar' => '09:00',
+        'jam_kembali' => '12:00',
+        'alat_transportasi' => 'kendaraan_pribadi',
+        'peran_kendaraan' => 'menumpang',
+        'menumpang_user_id' => $driver->id,
+        'alasan' => 'Dinas menumpang motor rekan',
+    ]);
+
+    $response->assertRedirect(route('dinas.index'));
+
+    $this->assertDatabaseHas('office_trips', [
+        'user_id' => $passenger->id,
+        'alat_transportasi' => 'kendaraan_pribadi',
+        'peran_kendaraan' => 'menumpang',
+        'menumpang_user_id' => $driver->id,
+    ]);
+});
+
+test('pengajuan dinas gagal jika menumpang tetapi tidak memilih rekan kerja', function () {
+    $user = User::factory()->create(['role' => 'karyawan']);
+
+    $response = $this->actingAs($user)->post(route('dinas.store'), [
+        'tanggal' => '2026-08-01',
+        'tujuan_alamat' => 'Kantor Cabang',
+        'jam_keluar' => '09:00',
+        'jam_kembali' => '12:00',
+        'alat_transportasi' => 'kendaraan_pribadi',
+        'peran_kendaraan' => 'menumpang',
+        'menumpang_user_id' => '',
+        'alasan' => 'Dinas test',
+    ]);
+
+    $response->assertSessionHasErrors(['menumpang_user_id']);
+});

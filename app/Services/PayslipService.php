@@ -21,6 +21,7 @@ class PayslipService
             'potongan_per_hari_alpha' => 0,
             'potongan_per_hari_izin' => 0,
             'uang_saku_dinas_per_hari' => 0,
+            'uang_bensin_per_dinas' => 0,
         ]);
 
         [$tahun, $bulan] = explode('-', $periode);
@@ -72,6 +73,14 @@ class PayslipService
             $nominalDinas = $jumlahHariDinas * ($setting->uang_saku_dinas_per_hari ?? 0);
         }
 
+        // Uang Bensin Flat: Hanya untuk dinas kendaraan pribadi dengan peran membawa kendaraan sendiri
+        $dinasBawaKendaraan = $officeTrips->filter(function ($item) {
+            return $item->alat_transportasi === 'kendaraan_pribadi' && $item->peran_kendaraan === 'bawa_sendiri';
+        });
+
+        $jumlahDinasBawaKendaraan = $dinasBawaKendaraan->count();
+        $nominalBensin = $jumlahDinasBawaKendaraan * ($setting->uang_bensin_per_dinas ?? 0);
+
         // 4. Izin (approved) — mengurangi gaji
         $jumlahHariIzin = LeaveRequest::where('user_id', $user->id)
             ->where('status', 'approved')
@@ -89,6 +98,7 @@ class PayslipService
         $totalGajiBersih = $gajiPokok
             + $nominalLembur
             + $nominalDinas
+            + $nominalBensin
             - $potonganAbsen
             - $potonganIzin
             - $pph21;
@@ -102,7 +112,9 @@ class PayslipService
                 'jumlah_hari_alpha' => $jumlahHariAlpha,
                 'potongan_absen' => $potonganAbsen,
                 'jumlah_hari_dinas' => $jumlahHariDinas,
+                'jumlah_dinas_bawa_kendaraan' => $jumlahDinasBawaKendaraan,
                 'nominal_dinas' => $nominalDinas,
+                'nominal_bensin' => $nominalBensin,
                 'jumlah_hari_izin' => $jumlahHariIzin,
                 'potongan_izin' => $potonganIzin,
                 'pph21' => $pph21,

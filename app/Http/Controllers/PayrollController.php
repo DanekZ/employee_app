@@ -24,6 +24,7 @@ class PayrollController extends Controller
             'potongan_per_hari_alpha' => 0,
             'potongan_per_hari_izin' => 0,
             'uang_saku_dinas_per_hari' => 0,
+            'uang_bensin_per_dinas' => 0,
         ]);
 
         $employees = User::whereIn('role', ['karyawan', 'atasan'])
@@ -89,6 +90,7 @@ class PayrollController extends Controller
             'potongan_per_hari_alpha' => 'required|numeric|min:0',
             'potongan_per_hari_izin' => 'required|numeric|min:0',
             'uang_saku_dinas_per_hari' => 'nullable|numeric|min:0',
+            'uang_bensin_per_dinas' => 'nullable|numeric|min:0',
         ]);
 
         $setting = SalarySetting::firstOrCreate([]);

@@ -38,10 +38,27 @@
                             <td class="px-6 py-4 text-xs font-mono text-gray-800">
                                 {{ $item->jam_keluar }} - {{ $item->jam_kembali }}
                             </td>
-                            <td class="px-6 py-4 capitalize text-xs">
-                                <span class="px-2.5 py-1 rounded-md bg-gray-100 text-gray-700 font-medium">
-                                    {{ str_replace('_', ' ', $item->alat_transportasi) }}
-                                </span>
+                            <td class="px-6 py-4 text-xs">
+                                <div class="space-y-1">
+                                    <span class="inline-block px-2.5 py-0.5 rounded-md bg-gray-100 text-gray-700 font-medium capitalize">
+                                        {{ str_replace('_', ' ', $item->alat_transportasi) }}
+                                    </span>
+                                    @if($item->alat_transportasi === 'kendaraan_pribadi')
+                                        @if($item->peran_kendaraan === 'bawa_sendiri')
+                                            <div>
+                                                <span class="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                                                    <i class="fa-solid fa-gas-pump"></i> Bawa Sendiri (+Bensin)
+                                                </span>
+                                            </div>
+                                        @elseif($item->peran_kendaraan === 'menumpang')
+                                            <div>
+                                                <span class="inline-flex items-center gap-1 text-[11px] font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                                                    <i class="fa-solid fa-user-group"></i> Menumpang: {{ $item->menumpangDengan->name ?? '-' }}
+                                                </span>
+                                            </div>
+                                        @endif
+                                    @endif
+                                </div>
                             </td>
                             <td class="px-6 py-4 text-xs text-gray-500 max-w-xs truncate">{{ $item->alasan }}</td>
                             <td class="px-6 py-4">

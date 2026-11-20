@@ -24,7 +24,7 @@ class ApprovalController extends Controller
             ->where('status', 'pending')->with('user')->latest()->get();
 
         $dinas = OfficeTrip::whereIn('user_id', $bawahanIds)
-            ->where('status', 'pending')->with('user')->latest()->get();
+            ->where('status', 'pending')->with(['user', 'menumpangDengan'])->latest()->get();
 
         return view('approval.index', [
             'izin' => $izin,
@@ -41,7 +41,14 @@ class ApprovalController extends Controller
             $query->where('user_id', $request->user_id);
         }
 
-        if ($request->filled('tanggal')) {
+        if ($request->filled('tanggal_mulai') && $request->filled('tanggal_selesai')) {
+            $startDate = $request->tanggal_mulai;
+            $endDate = $request->tanggal_selesai;
+            if ($startDate > $endDate) {
+                [$startDate, $endDate] = [$endDate, $startDate];
+            }
+            $query->whereBetween('tanggal', [$startDate, $endDate]);
+        } elseif ($request->filled('tanggal')) {
             $query->whereDate('tanggal', $request->tanggal);
         } elseif ($request->filled('bulan')) {
             $bulan = Carbon::parse($request->bulan);
@@ -67,7 +74,12 @@ class ApprovalController extends Controller
     {
         $startDate = $request->input('tanggal_mulai', now()->startOfMonth()->toDateString());
         $endDate = $request->input('tanggal_selesai', now()->toDateString());
+        if ($startDate > $endDate) {
+            [$startDate, $endDate] = [$endDate, $startDate];
+        }
+
         $userId = $request->input('user_id');
+        $status = $request->input('status');
 
         $query = Attendance::with('user')
             ->whereHas('user', function ($q) {
@@ -79,7 +91,11 @@ class ApprovalController extends Controller
             $query->where('user_id', $userId);
         }
 
-        $attendances = (clone $query)->orderBy('tanggal')->get();
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        $attendances = (clone $query)->orderByDesc('tanggal')->orderByDesc('jam_masuk')->get();
 
         $totalCount = $attendances->count();
         $hadirCount = $attendances->where('status', 'hadir')->count();
@@ -144,10 +160,15 @@ class ApprovalController extends Controller
             ];
         }
 
+        $selectedUser = $userId ? $karyawanList->firstWhere('id', $userId) : null;
+
         return view('approval.laporan', [
+            'attendances' => $attendances,
             'startDate' => $startDate,
             'endDate' => $endDate,
             'selectedUserId' => $userId,
+            'selectedUser' => $selectedUser,
+            'selectedStatus' => $status,
             'karyawanList' => $karyawanList,
             'totalCount' => $totalCount,
             'hadirCount' => $hadirCount,
@@ -196,7 +217,7 @@ class ApprovalController extends Controller
         $applyFilters($lemburQuery);
         $lembur = (clone $lemburQuery)->latest()->paginate(15, ['*'], 'lembur_page')->withQueryString();
 
-        $dinasQuery = OfficeTrip::with('user');
+        $dinasQuery = OfficeTrip::with(['user', 'menumpangDengan']);
         $applyFilters($dinasQuery);
         $dinas = (clone $dinasQuery)->latest()->paginate(15, ['*'], 'dinas_page')->withQueryString();
 

@@ -38,6 +38,8 @@ Route::middleware(['auth', 'role:karyawan,admin'])->group(function () {
     Route::get('/absensi', [AttendanceController::class, 'index'])->name('absensi.index');
     Route::post('/absensi/check-in', [AttendanceController::class, 'checkIn'])->name('absensi.checkin');
     Route::post('/absensi/check-out', [AttendanceController::class, 'checkOut'])->name('absensi.checkout');
+    Route::post('/absensi/istirahat-mulai', [AttendanceController::class, 'breakStart'])->name('absensi.break.start');
+    Route::post('/absensi/istirahat-selesai', [AttendanceController::class, 'breakEnd'])->name('absensi.break.end');
 });
 
 Route::middleware(['auth', 'role:atasan,admin'])->group(function () {

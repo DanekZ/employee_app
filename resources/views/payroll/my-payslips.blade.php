@@ -43,7 +43,7 @@
                             <div class="flex justify-between text-gray-600">
                                 <span>Lembur & Dinas:</span>
                                 <span class="font-semibold text-emerald-600">
-                                    +Rp {{ number_format(($slip->nominal_lembur ?? 0) + ($slip->nominal_dinas ?? 0), 0, ',', '.') }}
+                                    +Rp {{ number_format(($slip->nominal_lembur ?? 0) + ($slip->nominal_dinas ?? 0) + ($slip->nominal_bensin ?? 0), 0, ',', '.') }}
                                 </span>
                             </div>
                             <div class="flex justify-between text-gray-600">
@@ -121,6 +121,10 @@
                         <div class="flex justify-between text-gray-700">
                             <span>Uang Saku Dinas (<span x-text="selectedSlip?.jumlah_hari_dinas"></span> Perjalanan)</span>
                             <span class="font-semibold text-emerald-600" x-text="'+Rp ' + Number(selectedSlip?.nominal_dinas || 0).toLocaleString('id-ID')"></span>
+                        </div>
+                        <div x-show="Number(selectedSlip?.nominal_bensin || 0) > 0" class="flex justify-between text-gray-700">
+                            <span>Uang Bensin Dinas (<span x-text="selectedSlip?.jumlah_dinas_bawa_kendaraan"></span>x Bawa Sendiri)</span>
+                            <span class="font-semibold text-emerald-600" x-text="'+Rp ' + Number(selectedSlip?.nominal_bensin || 0).toLocaleString('id-ID')"></span>
                         </div>
                     </div>
                 </div>

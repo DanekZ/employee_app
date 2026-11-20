@@ -37,12 +37,14 @@ test('atasan can update global salary settings and employee base salary', functi
         'potongan_per_hari_alpha' => 100000,
         'potongan_per_hari_izin' => 50000,
         'uang_saku_dinas_per_hari' => 0,
+        'uang_bensin_per_dinas' => 45000,
     ]);
 
     $responseSettings->assertRedirect();
     $this->assertDatabaseHas('salary_settings', [
         'rate_lembur_per_jam' => 25000,
         'rate_dinas_per_jam' => 30000,
+        'uang_bensin_per_dinas' => 45000,
     ]);
 
     // Update employee salary
@@ -128,4 +130,69 @@ test('employee can view published payslips', function () {
     $response = $this->actingAs($employee)->get(route('penggajian.my-payslips'));
 
     $response->assertStatus(200);
+});
+
+test('payslip calculation calculates uang bensin flat only for driver bringing personal vehicle', function () {
+    SalarySetting::create([
+        'rate_lembur_per_jam' => 0,
+        'rate_dinas_per_jam' => 20000,
+        'potongan_per_hari_alpha' => 0,
+        'potongan_per_hari_izin' => 0,
+        'uang_bensin_per_dinas' => 50000,
+    ]);
+
+    $driver = User::factory()->create([
+        'role' => 'karyawan',
+        'gaji_pokok' => 4000000,
+    ]);
+
+    $passenger = User::factory()->create([
+        'role' => 'karyawan',
+        'gaji_pokok' => 4000000,
+    ]);
+
+    // Trip 1: Driver brings own vehicle (2 hours)
+    OfficeTrip::create([
+        'user_id' => $driver->id,
+        'tanggal' => '2026-09-10',
+        'jam_keluar' => '08:00:00',
+        'jam_kembali' => '10:00:00',
+        'tujuan_alamat' => 'Client Site',
+        'alasan' => 'Meeting',
+        'alat_transportasi' => 'kendaraan_pribadi',
+        'peran_kendaraan' => 'bawa_sendiri',
+        'status' => 'approved',
+    ]);
+
+    // Trip 2: Passenger rides with driver (2 hours)
+    OfficeTrip::create([
+        'user_id' => $passenger->id,
+        'tanggal' => '2026-09-10',
+        'jam_keluar' => '08:00:00',
+        'jam_kembali' => '10:00:00',
+        'tujuan_alamat' => 'Client Site',
+        'alasan' => 'Meeting',
+        'alat_transportasi' => 'kendaraan_pribadi',
+        'peran_kendaraan' => 'menumpang',
+        'menumpang_user_id' => $driver->id,
+        'status' => 'approved',
+    ]);
+
+    $service = new PayslipService;
+    $payslipDriver = $service->generate($driver, '2026-09');
+    $payslipPassenger = $service->generate($passenger, '2026-09');
+
+    // Both get benefit dinas (2 hours * 20000 = 40000)
+    expect($payslipDriver->nominal_dinas)->toEqual('40000.00');
+    expect($payslipPassenger->nominal_dinas)->toEqual('40000.00');
+
+    // Only driver gets uang bensin (1 trip * 50000)
+    expect($payslipDriver->jumlah_dinas_bawa_kendaraan)->toEqual(1);
+    expect($payslipDriver->nominal_bensin)->toEqual('50000.00');
+    expect($payslipDriver->total_gaji_bersih)->toEqual('4090000.00'); // 4000000 + 40000 + 50000
+
+    // Passenger gets Rp 0 bensin
+    expect($payslipPassenger->jumlah_dinas_bawa_kendaraan)->toEqual(0);
+    expect($payslipPassenger->nominal_bensin)->toEqual('0.00');
+    expect($payslipPassenger->total_gaji_bersih)->toEqual('4040000.00'); // 4000000 + 40000
 });

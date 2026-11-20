@@ -124,6 +124,11 @@
                                 <td class="p-4">
                                     <div class="text-emerald-600 font-medium">+Rp {{ number_format($slip->nominal_dinas, 0, ',', '.') }}</div>
                                     <div class="text-xs text-gray-400">{{ $slip->jumlah_hari_dinas }} tugas</div>
+                                    @if(($slip->nominal_bensin ?? 0) > 0)
+                                        <div class="text-[11px] text-amber-600 font-medium mt-0.5" title="Uang Bensin Kendaraan Pribadi">
+                                            <i class="fa-solid fa-gas-pump"></i> +Rp {{ number_format($slip->nominal_bensin, 0, ',', '.') }} ({{ $slip->jumlah_dinas_bawa_kendaraan }}x bawa motor)
+                                        </div>
+                                    @endif
                                 </td>
                                 <td class="p-4 text-rose-600 font-medium">
                                     -Rp {{ number_format(($slip->potongan_absen ?? 0) + ($slip->potongan_izin ?? 0), 0, ',', '.') }}
@@ -191,6 +196,21 @@
                     />
                 </div>
                 <p class="text-xs text-gray-400 mt-1">Tunjangan perjalanan dinas berdasarkan total jam dinas luar.</p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Uang Bensin Dinas (Per Perjalanan Kendaraan Pribadi - Flat)</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 text-sm font-bold">Rp</span>
+                    <input 
+                        type="number" 
+                        name="uang_bensin_per_dinas" 
+                        value="{{ old('uang_bensin_per_dinas', $setting->uang_bensin_per_dinas ?? 0) }}"
+                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-rose-500 text-sm font-medium"
+                        placeholder="Misal: 50000"
+                    />
+                </div>
+                <p class="text-xs text-gray-400 mt-1">Diberikan secara flat hanya untuk karyawan yang membawa kendaraan pribadi sendiri (bukan yang menumpang).</p>
             </div>
 
             <div>
@@ -338,6 +358,10 @@
                     <div class="flex justify-between text-xs text-gray-700 pl-2">
                         <span>Dinas Luar (<span x-text="selectedSlip?.jumlah_hari_dinas"></span> Tugas)</span>
                         <span class="font-semibold text-emerald-600" x-text="'+Rp ' + Number(selectedSlip?.nominal_dinas || 0).toLocaleString('id-ID')"></span>
+                    </div>
+                    <div x-show="Number(selectedSlip?.nominal_bensin || 0) > 0" class="flex justify-between text-xs text-gray-700 pl-2">
+                        <span>Uang Bensin Dinas (<span x-text="selectedSlip?.jumlah_dinas_bawa_kendaraan"></span>x Bawa Sendiri)</span>
+                        <span class="font-semibold text-emerald-600" x-text="'+Rp ' + Number(selectedSlip?.nominal_bensin || 0).toLocaleString('id-ID')"></span>
                     </div>
                 </div>
 
