@@ -45,7 +45,8 @@
                         <th class="px-6 py-3">Karyawan</th>
                         <th class="px-6 py-3">Jenis Izin</th>
                         <th class="px-6 py-3">Tujuan</th>
-                        <th class="px-6 py-3">Tanggal / Waktu</th>
+                        <th class="px-6 py-3">Tanggal</th>
+                        <th class="px-6 py-3">Jam</th>
                         <th class="px-6 py-3">Keterangan</th>
                         <th class="px-6 py-3 text-right">Aksi</th>
                     </tr>
@@ -56,10 +57,19 @@
                             <td class="px-6 py-4 font-semibold text-gray-900">{{ $item->user->name ?? 'Karyawan' }}</td>
                             <td class="px-6 py-4 capitalize font-medium text-gray-700">{{ str_replace('_', ' ', $item->jenis) }}</td>
                             <td class="px-6 py-4 text-gray-800">{{ $item->tujuan }}</td>
-                            <td class="px-6 py-4 text-xs">
+                            <td class="px-6 py-4 text-xs whitespace-nowrap">
                                 {{ \Carbon\Carbon::parse($item->tanggal_mulai)->translatedFormat('d M Y') }}
-                                @if($item->tanggal_selesai)
-                                    - {{ \Carbon\Carbon::parse($item->tanggal_selesai)->translatedFormat('d M Y') }}
+                                @if($item->tanggal_selesai && $item->tanggal_selesai !== $item->tanggal_mulai)
+                                    <span class="text-xs text-gray-400 block">s.d. {{ \Carbon\Carbon::parse($item->tanggal_selesai)->translatedFormat('d M Y') }}</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 text-xs font-mono text-gray-700 whitespace-nowrap">
+                                @if($item->jam_mulai)
+                                    {{ $item->jam_mulai }} - {{ $item->jam_selesai ?? '-' }}
+                                @elseif($item->durasi_menit)
+                                    {{ $item->durasi_menit }} Menit
+                                @else
+                                    <span class="text-gray-400 font-sans">-</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 text-xs text-gray-500 max-w-xs truncate">{{ $item->keterangan }}</td>
@@ -84,7 +94,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-8 text-center text-gray-400">
+                            <td colspan="7" class="px-6 py-8 text-center text-gray-400">
                                 <i class="fa-solid fa-circle-check text-3xl mb-2 text-emerald-400 block"></i>
                                 Tidak ada pengajuan izin yang memerlukan persetujuan.
                             </td>
@@ -163,8 +173,9 @@
                     <tr>
                         <th class="px-6 py-3">Karyawan</th>
                         <th class="px-6 py-3">Tanggal</th>
+                        <th class="px-6 py-3">Jam</th>
                         <th class="px-6 py-3">Tujuan</th>
-                        <th class="px-6 py-3">Waktu & Transportasi</th>
+                        <th class="px-6 py-3">Transportasi</th>
                         <th class="px-6 py-3">Alasan</th>
                         <th class="px-6 py-3 text-right">Aksi</th>
                     </tr>
@@ -173,11 +184,13 @@
                     @forelse($dinas as $item)
                         <tr class="hover:bg-gray-50/80 transition-colors">
                             <td class="px-6 py-4 font-semibold text-gray-900">{{ $item->user->name ?? 'Karyawan' }}</td>
-                            <td class="px-6 py-4 font-medium text-gray-800">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}</td>
+                            <td class="px-6 py-4 font-medium text-gray-800 whitespace-nowrap">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}</td>
+                            <td class="px-6 py-4 text-xs font-mono text-gray-800 whitespace-nowrap">
+                                {{ $item->jam_keluar }} - {{ $item->jam_kembali }}
+                            </td>
                             <td class="px-6 py-4 text-gray-800">{{ $item->tujuan_alamat }}</td>
                             <td class="px-6 py-4 text-xs">
-                                <span class="block font-mono text-gray-800">{{ $item->jam_keluar }} - {{ $item->jam_kembali }}</span>
-                                <span class="capitalize text-gray-500">{{ str_replace('_', ' ', $item->alat_transportasi) }}</span>
+                                <span class="capitalize text-gray-700 font-medium">{{ str_replace('_', ' ', $item->alat_transportasi) }}</span>
                                 @if($item->alat_transportasi === 'kendaraan_pribadi')
                                     @if($item->peran_kendaraan === 'bawa_sendiri')
                                         <span class="block mt-1 text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 w-fit">
@@ -212,7 +225,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-8 text-center text-gray-400">
+                            <td colspan="7" class="px-6 py-8 text-center text-gray-400">
                                 <i class="fa-solid fa-circle-check text-3xl mb-2 text-emerald-400 block"></i>
                                 Tidak ada pengajuan dinas yang memerlukan persetujuan.
                             </td>

@@ -92,7 +92,7 @@ test('employee returning from break after 13:00 is marked as telat', function ()
     expect($attendance->status_istirahat)->toBe('telat');
     // Status kehadiran utama juga berubah menjadi telat
     expect($attendance->status)->toBe('telat');
-    expect($attendance->keterangan_ketepatan)->toContain('Terlambat Istirahat (15 menit)');
+    expect($attendance->keterangan_ketepatan)->toContain('Terlambat Istirahat (15.0 menit)');
 
     Carbon::setTestNow();
 });
@@ -142,4 +142,31 @@ test('employee can checkout after break is finished', function () {
     expect($attendance->durasi_kerja)->toBe('8 jam 0 menit');
 
     Carbon::setTestNow();
+});
+
+test('keterangan ketepatan gives 1 decimal place for late arrival and break', function () {
+    $user = User::factory()->create(['role' => 'karyawan']);
+
+    // Masuk 08:05:30 -> terlambat 330 detik = 5.5 menit
+    $attendanceLateMasuk = Attendance::create([
+        'user_id' => $user->id,
+        'tanggal' => '2026-11-20',
+        'jam_masuk' => '08:05:30',
+        'status' => 'telat',
+    ]);
+
+    expect($attendanceLateMasuk->keterangan_ketepatan)->toBe('Terlambat 5.5 menit');
+
+    // Masuk 08:00:00 (tepat waktu), selesai istirahat 13:07:45 -> terlambat istirahat 465 detik = 7.75 dibulatkan ke 7.8 menit
+    $attendanceLateIstirahat = Attendance::create([
+        'user_id' => $user->id,
+        'tanggal' => '2026-11-21',
+        'jam_masuk' => '08:00:00',
+        'jam_istirahat_mulai' => '12:00:00',
+        'jam_istirahat_selesai' => '13:07:45',
+        'status' => 'telat',
+        'status_istirahat' => 'telat',
+    ]);
+
+    expect($attendanceLateIstirahat->keterangan_ketepatan)->toBe('Terlambat Istirahat (7.8 menit)');
 });
