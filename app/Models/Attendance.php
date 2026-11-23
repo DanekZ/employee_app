@@ -84,11 +84,7 @@ class Attendance extends Model
             $masuk = Carbon::parse($this->jam_masuk);
 
             if ($masuk->greaterThan($standardMasuk)) {
-                $diffSeconds = $standardMasuk->diffInSeconds($masuk);
-                $diffMinutes = number_format($diffSeconds / 60, 1, '.', '');
-                $keterangan[] = $this->jam_istirahat_selesai
-                    ? "Terlambat Masuk ({$diffMinutes} menit)"
-                    : "Terlambat {$diffMinutes} menit";
+                $keterangan[] = 'Terlambat Masuk';
             }
         }
 
@@ -98,9 +94,7 @@ class Attendance extends Model
             $selesai = Carbon::parse($this->jam_istirahat_selesai);
 
             if ($selesai->greaterThan($standardIstirahat)) {
-                $diffIstirahatSeconds = $standardIstirahat->diffInSeconds($selesai);
-                $diffIstirahat = number_format($diffIstirahatSeconds / 60, 1, '.', '');
-                $keterangan[] = "Terlambat Istirahat ({$diffIstirahat} menit)";
+                $keterangan[] = 'Terlambat Istirahat';
             }
         }
 

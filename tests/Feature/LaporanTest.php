@@ -157,7 +157,7 @@ test('laporan table displays late minutes when employee arrives late', function 
     $response->assertStatus(200);
     $response->assertSee('Dewi Lestari');
     $response->assertSee('08:25:00');
-    $response->assertSee('Terlambat 25.0 menit');
+    $response->assertSee('Terlambat Masuk');
 });
 
 test('laporan table filters by date range correctly', function () {
